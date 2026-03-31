@@ -7,7 +7,8 @@
 //   expect(snippets[0].dir).toBe('src');
 //   // FOOBARBAZBAT
 //   expect(snippets[0].snippet).toContain('FOOBARBAZBAT');
-//   
+
+import { extractSnippets } from './extractor';
 
 describe('extractor', () => {
   it('extracts snippets correctly', async () => {
@@ -17,6 +18,5 @@ describe('extractor', () => {
     expect(snippets[0].dir).toBe('src');
     // FOOBARBAZBAT
     expect(snippets[0].snippet).toContain('FOOBARBAZBAT');
-    
   });
 });

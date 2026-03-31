@@ -1,4 +1,5 @@
 export interface SnippetInfo {
+  imports: string[];
   snippet: string;
   description: string | null;
   dir: string;

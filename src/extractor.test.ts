@@ -7,7 +7,8 @@
 //   expect(snippets[0].dir).toBe('src');
 //   // FOOBARBAZBAT
 //   expect(snippets[0].snippet).toContain('FOOBARBAZBAT');
-//   
+
+import { extractSnippets } from './extractor';
 
 import { test, expect } from 'vitest';
 
@@ -18,5 +19,4 @@ test('extracts snippets correctly', async () => {
   expect(snippets[0].dir).toBe('src');
   // FOOBARBAZBAT
   expect(snippets[0].snippet).toContain('FOOBARBAZBAT');
-  
 });
