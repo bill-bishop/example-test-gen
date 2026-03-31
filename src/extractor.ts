@@ -1,0 +1,55 @@
+import { promises as fs } from 'fs';
+import path from 'path';
+import { SnippetInfo } from './types.js';
+
+const EXAMPLE_REGEX = /@example(?:\s+([^\n`]+))?\s*\n?\s*(?:\*\s*)?```[a-z]*\n?([\s\S]*?)```/g;
+
+/**
+ * Extracts @example code snippets from a file
+ * @example extracts snippets correctly
+ * ```ts
+ * import { extractSnippets } from './extractor.ts';
+ * 
+ * const snippets = await extractSnippets('./extractor.ts', process.cwd());
+ * expect(snippets[0].description).toBe('extracts snippets correctly');
+ * expect(snippets[0].filename).toBe('extractor.ts');
+ * expect(snippets[0].dir).toBe('src');
+ * // FOOBARBAZBAT
+ * expect(snippets[0].snippet).toContain('FOOBARBAZBAT');
+ * ```
+ */
+export async function extractSnippets(
+  filePath: string,
+  cwd: string
+): Promise<SnippetInfo[]> {
+  const content = await fs.readFile(filePath, 'utf-8');
+  const dir = path.dirname(path.relative(cwd, filePath));
+  const filename = path.basename(filePath);
+  
+  const snippets: SnippetInfo[] = [];
+  let match: RegExpExecArray | null;
+  
+  while ((match = EXAMPLE_REGEX.exec(content)) !== null) {
+    const description = match[1]?.trim() ?? null;
+    const rawSnippet = match[2].trim();
+    // Strip JSDoc comment prefixes from each line
+    const snippet = rawSnippet
+      .split('\n')
+      .map(line => line.replace(/^\s*\*\s?/, ''))
+      .join('\n');
+    snippets.push({ snippet, description, dir, filename });
+  }
+  
+  return snippets;
+}
+
+export async function* findFiles(
+  patterns: string | string[],
+  cwd: string
+): AsyncGenerator<string> {
+  const fg = await import('fast-glob');
+  const files = await fg.default(patterns, { cwd, absolute: true });
+  for (const file of files) {
+    yield file;
+  }
+}
