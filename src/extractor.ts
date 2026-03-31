@@ -24,6 +24,13 @@ const EXAMPLE_REGEX = /@example(?:\s+([^\n`]+))?\s*\n?\s*(?:\*\s*)?```[a-z]*\n?(
  * // FOOBARBAZBAT <-- should be in the snippet, since I wrote it here.
  * expect(snippets[0].snippet).toContain('FOOBARBAZBAT');
  * ```
+ *
+ * @example CORE05_extracts_multiple_snippets_from_cli
+ * ```ts
+ * import { extractSnippets } from './extractor.ts';
+ * const snippets = await extractSnippets('./src/cli.ts', process.cwd());
+ * expect(snippets.length).toBeGreaterThan(1);
+ * ```
  */
 export async function extractSnippets(
   filePath: string,

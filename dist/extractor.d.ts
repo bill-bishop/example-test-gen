@@ -19,6 +19,13 @@ import { SnippetInfo } from './types.js';
  * // FOOBARBAZBAT <-- should be in the snippet, since I wrote it here.
  * expect(snippets[0].snippet).toContain('FOOBARBAZBAT');
  * ```
+ *
+ * @example CORE05_extracts_multiple_snippets_from_cli
+ * ```ts
+ * import { extractSnippets } from './extractor.ts';
+ * const snippets = await extractSnippets('./src/cli.ts', process.cwd());
+ * expect(snippets.length).toBeGreaterThan(1);
+ * ```
  */
 export declare function extractSnippets(filePath: string, cwd: string): Promise<SnippetInfo[]>;
 export declare function findFiles(patterns: string | string[], cwd: string): AsyncGenerator<string>;

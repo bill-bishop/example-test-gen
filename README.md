@@ -29,17 +29,17 @@ The existing code should be updated to meet these requirements where applicable.
 | **CLI05** | **CLI Files Override**: Support `--files` flag for ad-hoc file selection without config file (e.g., `--files="src/**/*.ts"` or `--files="src/a.ts,src/b.ts"`) | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] |
 | **CLI06** | **CLI Output Directory**: Support `--outDir` flag to override the default output directory (e.g., `--outDir=./generated-tests`) | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] |
 | **SDK01** | **Programmatic API**: Export `generateTests()` function as primary entry point | Contract tests via @example in `index.ts` | [x] | [ ] |
-| **SDK02** | **API Types**: Export TypeScript types (`SnippetInfo`, `MapperResult`, `MapperFn`, `Config`) | Contract tests via @example in `index.ts` | [x] | [ ] |
+| **SDK02** | **API Types**: Export TypeScript types (`SnippetInfo`, `MapperResult[]`, `MapperFn`, `Config`). MapperFn receives `SnippetInfo[]` and returns `MapperResult[]` | Contract tests via @example in `index.ts` | [x] | [ ] |
 | **SDK03** | **Built-in Mappers Export**: Export `jestMapper` and `vitestMapper` for SDK consumers | Contract tests via @example in `builtins.ts` | [x] | [ ] |
 | **SDK04** | **Config Object Support**: Accept `files` (string or string[] with glob support), `mapper` (function or built-in name), and `outDir` (string) | Integration tests via @example in `config.ts` | [x] | [ ] |
 | **SDK05** | **Config Validation**: Validate required fields (`files`, `mapper` or built-in ref) with helpful error messages | Unit tests via @example in `config.ts` | [x] | [ ] |
 | **CORE01** | **Source Discovery**: Find source files from `files` glob(s) (supports `**/*` style paths) | Unit tests via @example in `extractor.ts` | [x] | [ ] |
-| **CORE02** | **@example Extraction**: Extract code snippets from JSDoc `@example` blocks | Unit tests via @example in `extractor.ts` | [x] | [ ] |
+| **CORE02** | **@example Extraction**: Extract ALL code snippets from JSDoc `@example` blocks in a file and pass them as a batch to the mapper | Unit tests via @example in `extractor.ts` | [x] | [ ] |
 | **CORE03** | **Snippet Parsing**: Parse optional description, code fence language hint, and snippet body | Unit tests via @example in `extractor.ts` | [x] | [ ] |
 | **CORE04** | **Import Extraction**: Identify and separate ES module imports from executable code in snippets | Unit tests via @example in `extractor.ts` | [x] | [ ] |
 | **CORE05** | **Multiple Snippets**: Detect and extract all @example blocks when multiple are present in a single source file | Unit tests via @example in `extractor.ts` | [x] | [ ] |
-| **TRANS01** | **Jest Mapper**: Wrap snippets in `describe`/`it` blocks with Jest-compatible imports | Unit tests via @example in `builtins.ts` | [x] | [ ] |
-| **TRANS02** | **Vitest Mapper**: Wrap snippets in `describe`/`it` blocks with Vitest-compatible imports | Unit tests via @example in `builtins.ts` | [x] | [ ] |
+| **TRANS01** | **Jest Mapper**: Receive all snippets from a source file, generate ONE test file with multiple `it()` blocks (one per snippet) inside a `describe()` block | Unit tests via @example in `builtins.ts` | [x] | [ ] |
+| **TRANS02** | **Vitest Mapper**: Receive all snippets from a source file, generate ONE test file with multiple `test()` blocks (one per snippet) | Unit tests via @example in `builtins.ts` | [x] | [ ] |
 | **TRANS03** | **Output Header**: Include source file path, description, and auto-generated notice in test file header (remove "Snippet:" section) | Unit tests via @example in `builtins.ts` | [x] | [ ] |
 | **TRANS04** | **Output Structure**: Separate imports section from test body; deduplicate imports | Unit tests via @example in `builtins.ts` | [x] | [ ] |
 | **TRANS05** | **Import Path Transformation**: Rewrite relative imports (`./foo.ts`) to be valid from test file location (`../src/foo.js`) | Unit tests via @example in `builtins.ts` | [x] | [ ] |
