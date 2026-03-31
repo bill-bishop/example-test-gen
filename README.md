@@ -2,6 +2,8 @@
 
 Generate test files from `@example` snippets in your code.
 
+[ UNDER CONSTRUCTION ] 2026-03-31 - This package is still being built! Tune in later!
+
 ## Contents
 
 - [Overview](#overview)
@@ -18,14 +20,14 @@ When implementing new features or modifying existing ones, please refer to these
 
 The existing code should be updated to meet these requirements where applicable.
 
-| ID | Requirement (plain language) | Test Pattern(s) | User Reviewed | Completed |
+| ID | Requirement (plain language) | Test Pattern(s) | User Reviewed | Tests Completed |
 |----|------------------------------|-----------------|---------------|-----------|
-| **CLI01** | **CLI Entry**: Executable as `npx example-test-gen` with `--help` and `--version` flags | End-to-end CLI tests via @example in `cli.ts` | [x] | [ ] |
-| **CLI02** | **Built-in Configs**: Support `--config=jest` and `--config=vitest` for zero-config test generation | End-to-end CLI tests via @example in `cli.ts` | [x] | [ ] |
-| **CLI03** | **Custom Config Path**: Support `--config=./path.mjs` for user-defined config files | End-to-end CLI tests via @example in `cli.ts` | [x] | [ ] |
-| **CLI04** | **CLI Error Handling**: Clear error messages for missing config, invalid config paths, and config load failures | End-to-end CLI tests via @example in `cli.ts` | [x] | [ ] |
-| **CLI05** | **CLI Files Override**: Support `--files` flag for ad-hoc file selection without config file (e.g., `--files="src/**/*.ts"` or `--files="src/a.ts,src/b.ts"`) | End-to-end CLI tests via @example in `cli.ts` | [x] | [ ] |
-| **CLI06** | **CLI Output Directory**: Support `--outDir` flag to override the default output directory (e.g., `--outDir=./generated-tests`) | End-to-end CLI tests via @example in `cli.ts` | [x] | [ ] |
+| **CLI01** | **CLI Entry**: Executable as `npx example-test-gen` with `--help` and `--version` flags | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] |
+| **CLI02** | **Built-in Configs**: Support `--config=jest` and `--config=vitest` for zero-config test generation | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] |
+| **CLI03** | **Custom Config Path**: Support `--config=./path.mjs` for user-defined config files | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] |
+| **CLI04** | **CLI Error Handling**: Clear error messages for missing config, invalid config paths, and config load failures | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] |
+| **CLI05** | **CLI Files Override**: Support `--files` flag for ad-hoc file selection without config file (e.g., `--files="src/**/*.ts"` or `--files="src/a.ts,src/b.ts"`) | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] |
+| **CLI06** | **CLI Output Directory**: Support `--outDir` flag to override the default output directory (e.g., `--outDir=./generated-tests`) | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] |
 | **SDK01** | **Programmatic API**: Export `generateTests()` function as primary entry point | Contract tests via @example in `index.ts` | [x] | [ ] |
 | **SDK02** | **API Types**: Export TypeScript types (`SnippetInfo`, `MapperResult`, `MapperFn`, `Config`) | Contract tests via @example in `index.ts` | [x] | [ ] |
 | **SDK03** | **Built-in Mappers Export**: Export `jestMapper` and `vitestMapper` for SDK consumers | Contract tests via @example in `builtins.ts` | [x] | [ ] |
@@ -42,6 +44,7 @@ The existing code should be updated to meet these requirements where applicable.
 | **TRANS05** | **Import Path Transformation**: Rewrite relative imports (`./foo.ts`) to be valid from test file location (`../src/foo.js`) | Unit tests via @example in `builtins.ts` | [x] | [ ] |
 | **TRANS06** | **Output Directory Mirroring**: Write generated tests to `outDir` preserving relative directory structure (`src/foo.ts` → `tests/foo.test.ts`) | Integration tests via @example in `config.ts` | [x] | [ ] |
 | **TRANS07** | **File Overwriting**: Overwrite existing test files without prompting; idempotent generation | Integration tests via @example in `config.ts` | [x] | [ ] |
+| **TRANS08** | **Auto Source Import**: Generated test files automatically import all exports from the source file, removing the need for users to manually import the method-under-test in their @example blocks | Unit tests via @example in `builtins.ts` | [x] | [ ] |
 | **META01** | **Self-Testing**: Library generates and runs its own tests via `@example` annotations (dogfooding) | @example in all source files, generated to `tests/` | [x] | [ ] |
 
 **Requirement Notes:**

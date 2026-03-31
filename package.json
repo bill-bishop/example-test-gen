@@ -1,6 +1,6 @@
 {
   "name": "example-test-gen",
-  "version": "1.0.0",
+  "version": "1.0.0-prerelease-2026-03-31",
   "description": "Generate test files from @example snippets in your code",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
