@@ -91,7 +91,7 @@ async function loadConfig(configPath: string): Promise<{ mapper: MapperFunction;
  *
  * @example CLI06_outDir_flag_overrides_default_output_directory
  * ```ts
- * import { runCliWith, cleanDir, assertExists } from './test/helpers/cli.js';
+ * import { runCliWith, cleanDir, assertExists } from '../test/helpers/cli.js';
  * cleanDir('my-custom-tests');
  * runCliWith({ config: 'vitest', outDir: 'my-custom-tests' });
  * assertExists('my-custom-tests/cli.test.ts');

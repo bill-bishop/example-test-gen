@@ -9,7 +9,7 @@ function createJestMapper() {
         const outputDir = dir || '.';
         const itDescription = description ?? 'example test';
         const importSection = imports.length > 0 ? imports.join('\n') + '\n\n' : '';
-        const header = `// Generated test from @example snippet\n// Source: ${dir ? dir + '/' : ''}${filename}\n// Snippet:\n${snippet.split('\n').map(line => '//   ' + line).join('\n')}\n\n`;
+        const header = `// Generated test from @example snippet\n// Source: ${dir ? dir + '/' : ''}${filename}\n\n`;
         return {
             output: `${header}${importSection}describe('${testName}', () => {\n  it('${itDescription}', async () => {\n${snippet.split('\n').map(line => '    ' + line).join('\n')}\n  });\n});`,
             filepath: `${outputDir}/${testName}.test.js`
@@ -22,7 +22,7 @@ function createVitestMapper() {
         const outputDir = dir || '.';
         const itDescription = description ?? `${testName} example`;
         const importSection = imports.length > 0 ? imports.join('\n') + '\n\n' : '';
-        const header = `// Generated test from @example snippet\n// Source: ${dir ? dir + '/' : ''}${filename}\n// Snippet:\n${snippet.split('\n').map(line => '//   ' + line).join('\n')}\n\n`;
+        const header = `// Generated test from @example snippet\n// Source: ${dir ? dir + '/' : ''}${filename}\n\n`;
         return {
             output: `${header}${importSection}import { test, expect } from 'vitest';\n\ntest('${itDescription}', async () => {\n${snippet.split('\n').map(line => '  ' + line).join('\n')}\n});`,
             filepath: `${outputDir}/${testName}.test.ts`

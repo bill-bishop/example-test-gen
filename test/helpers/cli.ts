@@ -1,5 +1,6 @@
 import { execSync } from 'child_process';
 import { existsSync, rmSync, readFileSync } from 'fs';
+import { expect } from 'vitest';
 import * as path from 'path';
 
 const CLI_PATH = 'dist/cli.js';

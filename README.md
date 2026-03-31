@@ -37,6 +37,7 @@ The existing code should be updated to meet these requirements where applicable.
 | **CORE02** | **@example Extraction**: Extract code snippets from JSDoc `@example` blocks | Unit tests via @example in `extractor.ts` | [x] | [ ] |
 | **CORE03** | **Snippet Parsing**: Parse optional description, code fence language hint, and snippet body | Unit tests via @example in `extractor.ts` | [x] | [ ] |
 | **CORE04** | **Import Extraction**: Identify and separate ES module imports from executable code in snippets | Unit tests via @example in `extractor.ts` | [x] | [ ] |
+| **CORE05** | **Multiple Snippets**: Detect and extract all @example blocks when multiple are present in a single source file | Unit tests via @example in `extractor.ts` | [x] | [ ] |
 | **TRANS01** | **Jest Mapper**: Wrap snippets in `describe`/`it` blocks with Jest-compatible imports | Unit tests via @example in `builtins.ts` | [x] | [ ] |
 | **TRANS02** | **Vitest Mapper**: Wrap snippets in `describe`/`it` blocks with Vitest-compatible imports | Unit tests via @example in `builtins.ts` | [x] | [ ] |
 | **TRANS03** | **Output Header**: Include source file path, description, and auto-generated notice in test file header (remove "Snippet:" section) | Unit tests via @example in `builtins.ts` | [x] | [ ] |
