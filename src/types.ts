@@ -11,7 +11,7 @@ export interface MapperResult {
   filepath: string;
 }
 
-export type MapperFunction = (info: SnippetInfo) => MapperResult | null | Promise<MapperResult | null>;
+export type MapperFunction = (info: SnippetInfo[]) => MapperResult | null | Promise<MapperResult | null>;
 
 export interface GenerateOptions {
   pattern: string | string[];

@@ -1,4 +1,4 @@
-// Generated test from @example snippet
+// Generated test from @example snippets
 // Source: src/generator.ts
 
 import { cleanDir, generateWithVitest, assertFileContains, listTestFiles } from '../test/helpers/generator.js';
