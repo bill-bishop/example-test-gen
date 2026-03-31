@@ -1,4 +1,5 @@
 import { existsSync, rmSync, readFileSync, readdirSync } from 'fs';
+import { expect } from 'vitest';
 import { generate } from '../../src/generator.js';
 import { builtInConfigs } from '../../src/builtins.js';
 

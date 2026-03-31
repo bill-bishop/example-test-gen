@@ -1,11 +1,10 @@
 // Generated test from @example snippets
 // Source: src/cli.ts
 
-import { runCli, readFile } from './test/helpers/cli.js';
-import { runCli, getPackageVersion } from './test/helpers/cli.js';
-import { runCliWith, cleanDir, assertExists } from './test/helpers/cli.js';
-import { runCli, expectError } from './test/helpers/cli.js';
+import { runCli, readFile } from '../test/helpers/cli.js';
+import { runCli, getPackageVersion } from '../test/helpers/cli.js';
 import { runCliWith, cleanDir, assertExists } from '../test/helpers/cli.js';
+import { runCli, expectError } from '../test/helpers/cli.js';
 
 import { test, expect } from 'vitest';
 

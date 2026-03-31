@@ -23,7 +23,7 @@ import { extractSnippets, findFiles } from './extractor.js';
  * ```
  */
 export async function generate(options: GenerateOptions): Promise<void> {
-  const { pattern, mapper, cwd = process.cwd() } = options;
+  const { pattern, mapper, cwd = process.cwd(), outDir } = options;
   
   for await (const filePath of findFiles(pattern, cwd)) {
     const snippets = await extractSnippets(filePath, cwd);
@@ -35,7 +35,12 @@ export async function generate(options: GenerateOptions): Promise<void> {
     if (!result) continue;
     
     const { output, filepath: relativeOutputPath } = result;
-    const absoluteOutputPath = path.resolve(cwd, relativeOutputPath);
+    
+    // Use outDir if provided, otherwise use the mapper's directory
+    const filename = path.basename(relativeOutputPath);
+    const finalRelativePath = outDir ? `${outDir}/${filename}` : relativeOutputPath;
+    
+    const absoluteOutputPath = path.resolve(cwd, finalRelativePath);
     const outputDir = path.dirname(absoluteOutputPath);
     
     await fs.mkdir(outputDir, { recursive: true });

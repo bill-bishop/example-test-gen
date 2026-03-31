@@ -22,20 +22,20 @@ async function loadConfig(configPath: string): Promise<{ mapper: MapperFunction;
  *
  * @example CLI01_help_flag_shows_usage_info
  * ```ts
- * import { runCli, readFile } from './test/helpers/cli.js';
+ * import { runCli, readFile } from '../test/helpers/cli.js';
  * expect(runCli('--help')).toContain(readFile('outputs/help.txt'));
  * ```
  *
  * @example CLI01_version_flag_shows_package_version
  * ```ts
- * import { runCli, getPackageVersion } from './test/helpers/cli.js';
+ * import { runCli, getPackageVersion } from '../test/helpers/cli.js';
  * const output = runCli('--version').trim();
  * expect(output).toBe(getPackageVersion());
  * ```
  *
  * @example CLI02_builtin_config_jest_generates_jest_tests
  * ```ts
- * import { runCliWith, cleanDir, assertExists } from './test/helpers/cli.js';
+ * import { runCliWith, cleanDir, assertExists } from '../test/helpers/cli.js';
  * cleanDir('generated-tests');
  * runCliWith({ config: 'jest' });
  * assertExists('cli.test.js');
@@ -43,7 +43,7 @@ async function loadConfig(configPath: string): Promise<{ mapper: MapperFunction;
  *
  * @example CLI02_builtin_config_vitest_generates_vitest_tests
  * ```ts
- * import { runCliWith, cleanDir, assertExists } from './test/helpers/cli.js';
+ * import { runCliWith, cleanDir, assertExists } from '../test/helpers/cli.js';
  * cleanDir('tests');
  * runCliWith({ config: 'vitest' });
  * assertExists('tests/cli.test.ts');
@@ -51,7 +51,7 @@ async function loadConfig(configPath: string): Promise<{ mapper: MapperFunction;
  *
  * @example CLI03_custom_config_path_loads_user_defined_config
  * ```ts
- * import { runCliWith, cleanDir, assertExists } from './test/helpers/cli.js';
+ * import { runCliWith, cleanDir, assertExists } from '../test/helpers/cli.js';
  * cleanDir('custom-output');
  * runCliWith({ config: 'test/fixtures/config/custom.mjs' });
  * assertExists('custom-output/cli.test.js');
@@ -60,21 +60,21 @@ async function loadConfig(configPath: string): Promise<{ mapper: MapperFunction;
  *
  * @example CLI04_missing_config_shows_clear_error
  * ```ts
- * import { runCli, expectError } from './test/helpers/cli.js';
+ * import { runCli, expectError } from '../test/helpers/cli.js';
  * const err = expectError(() => runCli('--config=nonexistent-config.mjs'));
  * expect(err.message).toContain('Error');
  * ```
  *
  * @example CLI04_invalid_config_path_shows_error
  * ```ts
- * import { runCli, expectError } from './test/helpers/cli.js';
+ * import { runCli, expectError } from '../test/helpers/cli.js';
  * const err = expectError(() => runCli('--config=/path/that/does/not/exist.mjs'));
  * expect(err.message).toMatch(/Error|Cannot find module/);
  * ```
  *
  * @example CLI05_files_flag_overrides_config_pattern
  * ```ts
- * import { runCliWith, cleanDir, assertExists } from './test/helpers/cli.js';
+ * import { runCliWith, cleanDir, assertExists } from '../test/helpers/cli.js';
  * cleanDir('tests');
  * runCliWith({ config: 'vitest', files: 'src/cli.ts' });
  * assertExists('tests/cli.test.ts');
@@ -82,7 +82,7 @@ async function loadConfig(configPath: string): Promise<{ mapper: MapperFunction;
  *
  * @example CLI05_files_flag_supports_multiple_patterns
  * ```ts
- * import { runCliWith, cleanDir, assertExists } from './test/helpers/cli.js';
+ * import { runCliWith, cleanDir, assertExists } from '../test/helpers/cli.js';
  * cleanDir('tests');
  * runCliWith({ config: 'vitest', files: 'src/cli.ts,src/index.ts' });
  * assertExists('tests/cli.test.ts');

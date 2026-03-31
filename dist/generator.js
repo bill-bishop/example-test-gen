@@ -27,7 +27,7 @@ const extractor_js_1 = require("./extractor.js");
  * ```
  */
 async function generate(options) {
-    const { pattern, mapper, cwd = process.cwd() } = options;
+    const { pattern, mapper, cwd = process.cwd(), outDir } = options;
     for await (const filePath of (0, extractor_js_1.findFiles)(pattern, cwd)) {
         const snippets = await (0, extractor_js_1.extractSnippets)(filePath, cwd);
         if (snippets.length === 0)
@@ -36,7 +36,10 @@ async function generate(options) {
         if (!result)
             continue;
         const { output, filepath: relativeOutputPath } = result;
-        const absoluteOutputPath = path_1.default.resolve(cwd, relativeOutputPath);
+        // Use outDir if provided, otherwise use the mapper's directory
+        const filename = path_1.default.basename(relativeOutputPath);
+        const finalRelativePath = outDir ? `${outDir}/${filename}` : relativeOutputPath;
+        const absoluteOutputPath = path_1.default.resolve(cwd, finalRelativePath);
         const outputDir = path_1.default.dirname(absoluteOutputPath);
         await fs_1.promises.mkdir(outputDir, { recursive: true });
         await fs_1.promises.writeFile(absoluteOutputPath, output, 'utf-8');
