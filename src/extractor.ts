@@ -20,7 +20,8 @@ const EXAMPLE_REGEX = /@example(?:\s+([^\n`]+))?\s*\n?\s*(?:\*\s*)?```[a-z]*\n?(
  * expect(snippets[0].description).toBe('extracts snippets correctly');
  * expect(snippets[0].filename).toBe('extractor.ts');
  * expect(snippets[0].dir).toBe('src');
- * // FOOBARBAZBAT
+ * 
+ * // FOOBARBAZBAT <-- should be in the snippet, since I wrote it here.
  * expect(snippets[0].snippet).toContain('FOOBARBAZBAT');
  * ```
  */
