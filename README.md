@@ -24,12 +24,13 @@ Generate test files from `@example` snippets in your code.
 | **CLI02** | **Built-in Configs**: Support `--config=jest` and `--config=vitest` for zero-config test generation | End-to-end CLI tests via @example in `cli.ts` | [ ] |
 | **CLI03** | **Custom Config Path**: Support `--config=./path.mjs` for user-defined config files | End-to-end CLI tests via @example in `cli.ts` | [ ] |
 | **CLI04** | **CLI Error Handling**: Clear error messages for missing config, invalid config paths, and config load failures | End-to-end CLI tests via @example in `cli.ts` | [ ] |
+| **CLI05** | **CLI Files Override**: Support `--files` flag for ad-hoc file selection without config file (e.g., `--files="src/**/*.ts"` or `--files="src/a.ts,src/b.ts"`) | End-to-end CLI tests via @example in `cli.ts` | [ ] |
 | **SDK01** | **Programmatic API**: Export `generateTests()` function as primary entry point | Contract tests via @example in `index.ts` | [ ] |
 | **SDK02** | **API Types**: Export TypeScript types (`SnippetInfo`, `MapperResult`, `MapperFn`, `Config`) | Contract tests via @example in `index.ts` | [ ] |
 | **SDK03** | **Built-in Mappers Export**: Export `jestMapper` and `vitestMapper` for SDK consumers | Contract tests via @example in `builtins.ts` | [ ] |
-| **SDK04** | **Config Object Support**: Accept `pattern` (glob), `mapper` (function or built-in name), `files` (array), and `outDir` (string) | Integration tests via @example in `config.ts` | [ ] |
-| **SDK05** | **Config Validation**: Validate required fields (`pattern` or `files`, `mapper` or built-in ref) with helpful error messages | Unit tests via @example in `config.ts` | [ ] |
-| **CORE01** | **Source Discovery**: Find source files from `pattern` glob or `files` array (supports `**/*` style paths) | Unit tests via @example in `extractor.ts` | [ ] |
+| **SDK04** | **Config Object Support**: Accept `files` (string or string[] with glob support), `mapper` (function or built-in name), and `outDir` (string) | Integration tests via @example in `config.ts` | [ ] |
+| **SDK05** | **Config Validation**: Validate required fields (`files`, `mapper` or built-in ref) with helpful error messages | Unit tests via @example in `config.ts` | [ ] |
+| **CORE01** | **Source Discovery**: Find source files from `files` glob(s) (supports `**/*` style paths) | Unit tests via @example in `extractor.ts` | [ ] |
 | **CORE02** | **@example Extraction**: Extract code snippets from JSDoc `@example` blocks | Unit tests via @example in `extractor.ts` | [ ] |
 | **CORE03** | **Snippet Parsing**: Parse optional description, code fence language hint, and snippet body | Unit tests via @example in `extractor.ts` | [ ] |
 | **CORE04** | **Import Extraction**: Identify and separate ES module imports from executable code in snippets | Unit tests via @example in `extractor.ts` | [ ] |
@@ -39,12 +40,13 @@ Generate test files from `@example` snippets in your code.
 | **TRANS04** | **Output Structure**: Separate imports section from test body; deduplicate imports | Unit tests via @example in `builtins.ts` | [ ] |
 | **TRANS05** | **Import Path Transformation**: Rewrite relative imports (`./foo.ts`) to be valid from test file location (`../src/foo.js`) | Unit tests via @example in `builtins.ts` | [ ] |
 | **TRANS06** | **Output Directory Mirroring**: Write generated tests to `outDir` preserving relative directory structure (`src/foo.ts` → `tests/foo.test.ts`) | Integration tests via @example in `config.ts` | [ ] |
+| **TRANS07** | **File Overwriting**: Overwrite existing test files without prompting; idempotent generation | Integration tests via @example in `config.ts` | [ ] |
 | **META01** | **Self-Testing**: Library generates and runs its own tests via `@example` annotations (dogfooding) | @example in all source files, generated to `tests/` | [ ] |
 
 **Requirement Notes:**
 - **TRANS05**: When the Vitest/Jest mapper generates tests in `tests/` directory, it must transform `import { x } from './src/foo.ts'` in the snippet to `import { x } from '../src/foo.js'` (or equivalent) in the output
 - **TRANS06**: Config should support `outDir: 'tests'` which mirrors source structure (`src/foo.ts` → `tests/foo.test.ts`)
-- **SDK05**: Config validation should check required fields (`pattern` or `files`, `mapper` or built-in ref) and provide helpful error messages
+- **SDK05**: Config validation should check required fields (`files`, `mapper` or built-in ref) and provide helpful error messages
 
 ## Installation
 
