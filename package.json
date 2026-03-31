@@ -10,8 +10,8 @@
   "scripts": {
     "build": "tsc",
     "prepare": "npm run build",
-    "pretest": "npx example-test-gen --config=jest && npx example-test-gen --config=vitest",
-    "test": "jest && vitest run"
+    "pretest": "npx example-test-gen --config=vitest",
+    "test": "vitest run"
   },
   "keywords": [
     "test",
