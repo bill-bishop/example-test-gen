@@ -12,7 +12,7 @@ const EXAMPLE_REGEX = /@example(?:\s+([^\n`]+))?\s*\n?\s*(?:\*\s*)?```[a-z]*\n?(
  * Extracts @example code snippets from a file
  * @example extracts snippets correctly
  * ```ts
- * import { extractSnippets } from './extractor';
+ * import { extractSnippets } from './src/extractor.ts';
  *
  * const snippets = await extractSnippets('./extractor.ts', process.cwd());
  * expect(snippets[0].description).toBe('extracts snippets correctly');

@@ -17,4 +17,9 @@ export interface GenerateOptions {
   pattern: string | string[];
   mapper: MapperFunction;
   cwd?: string;
+  /** Output directory for generated tests (default: 'tests') */
+  outDir?: string;
 }
+
+/** @deprecated Use GenerateOptions instead - maintained for backwards compatibility */
+export type Config = GenerateOptions;

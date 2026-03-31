@@ -3,7 +3,7 @@ import { SnippetInfo } from './types.js';
  * Extracts @example code snippets from a file
  * @example extracts snippets correctly
  * ```ts
- * import { extractSnippets } from './extractor';
+ * import { extractSnippets } from './src/extractor.ts';
  *
  * const snippets = await extractSnippets('./extractor.ts', process.cwd());
  * expect(snippets[0].description).toBe('extracts snippets correctly');

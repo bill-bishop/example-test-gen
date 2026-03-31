@@ -8,7 +8,7 @@
 //   // FOOBARBAZBAT
 //   expect(snippets[0].snippet).toContain('FOOBARBAZBAT');
 
-import { extractSnippets } from './extractor';
+import { extractSnippets } from './src/extractor.ts';
 
 describe('extractor', () => {
   it('extracts snippets correctly', async () => {
