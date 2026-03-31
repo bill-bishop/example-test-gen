@@ -10,6 +10,12 @@ const EXAMPLE_REGEX = /@example(?:\s+([^\n`]+))?\s*\n?\s*(?:\*\s*)?```[a-z]*\n?(
  * ```ts
  * import { extractSnippets } from './extractor.ts';
  * 
+ * // Interestingly, the extractor.ts path we provide to extractSnippets
+ * // is different from the path we use in the import statement.
+ * // This is because extractSnippets expects a project-relative path,
+ * // while the import statement depends on the test file's location
+ * // relative to this file.
+ * 
  * const snippets = await extractSnippets('./src/extractor.ts', process.cwd());
  * expect(snippets[0].description).toBe('extracts snippets correctly');
  * expect(snippets[0].filename).toBe('extractor.ts');
