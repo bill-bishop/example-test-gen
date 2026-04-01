@@ -26,38 +26,113 @@ The existing code should be updated to meet these requirements where applicable.
 | **CLI02** | **Built-in Configs**: Support `--config=jest` and `--config=vitest` for zero-config test generation | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] |
 | **CLI03** | **Custom Config Path**: Support `--config=./path.mjs` for user-defined config files | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] |
 | **CLI04** | **CLI Error Handling**: Clear error messages for missing config, invalid config paths, and config load failures | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] |
-| **CLI05** | **CLI Files Override**: Support `--files` flag for ad-hoc file selection without config file (e.g., `--files="src/**/*.ts"` or `--files="src/a.ts,src/b.ts"`) | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] |
-| **CLI06** | **CLI Output Directory**: Support `--outDir` flag to override the default output directory (e.g., `--outDir=./generated-tests`) | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] |
+| **CLI05** | **CLI Include/Exclude Override**: Support `--include` and `--exclude` flags for ad-hoc file selection (e.g., `--include="src/**/*.ts"`, `--exclude="**/*.test.ts"`) | End-to-end CLI tests via @example in `cli.ts` | [x] | [ ] |
+| **CLI06** | **CLI Output Directory**: Support `--outDir` flag to override the built-in mapper's default output directory (e.g., `--outDir=./generated-tests`) | End-to-end CLI tests via @example in `cli.ts` | [x] | [ ] |
+| **CLI07** | **CLI Root Directory**: Support `--root-dir` flag to override the source root used for finding @examples  (e.g., `--root-dir=./src`) | End-to-end CLI tests via @example in `cli.ts` | [x] | [ ] |
 | **SDK01** | **Programmatic API**: Export `generateTests()` function as primary entry point | Contract tests via @example in `index.ts` | [x] | [ ] |
 | **SDK02** | **API Types**: Export TypeScript types (`SnippetInfo`, `MapperResult[]`, `MapperFn`, `Config`). MapperFn receives `SnippetInfo[]` and returns `MapperResult[]` | Contract tests via @example in `index.ts` | [x] | [ ] |
-| **SDK03** | **Built-in Mappers Export**: Export `jestMapper` and `vitestMapper` for SDK consumers | Contract tests via @example in `builtins.ts` | [x] | [ ] |
-| **SDK04** | **Config Object Support**: Accept `files` (string or string[] with glob support), `mapper` (function or built-in name), and `outDir` (string) | Integration tests via @example in `config.ts` | [x] | [ ] |
-| **SDK05** | **Config Validation**: Validate required fields (`files`, `mapper` or built-in ref) with helpful error messages | Unit tests via @example in `config.ts` | [x] | [ ] |
-| **CORE01** | **Source Discovery**: Find source files from `files` glob(s) (supports `**/*` style paths) | Unit tests via @example in `extractor.ts` | [x] | [ ] |
+| **SDK03** | **Built-in Mappers Export**: Export `builtInConfigs.jest` and `builtInConfigs.vitest` for SDK consumers | Contract tests via @example in `builtins.ts` | [x] | [ ] |
+| **SDK04** | **Config Object Support**: Accept `include` (string[]), `exclude` (string[]), `rootDir` (string), `mapper` (function or built-in name), and `outDir` (string) | Integration tests via @example in `config.ts` | [x] | [ ] |
+| **SDK05** | **Config Validation**: Validate required fields (`include`, `mapper` or built-in ref) with helpful error messages | Unit tests via @example in `config.ts` | [x] | [ ] |
+| **CORE01** | **Source Discovery**: Find source files matching `include` globs, excluding files matched by `exclude` globs | Unit tests via @example in `extractor.ts` | [x] | [ ] |
 | **CORE02** | **@example Extraction**: Extract ALL code snippets from JSDoc `@example` blocks in a file and pass them as a batch to the mapper | Unit tests via @example in `extractor.ts` | [x] | [ ] |
 | **CORE03** | **Snippet Parsing**: Parse optional description, code fence language hint, and snippet body | Unit tests via @example in `extractor.ts` | [x] | [ ] |
 | **CORE04** | **Import Extraction**: Identify and separate ES module imports from executable code in snippets | Unit tests via @example in `extractor.ts` | [x] | [ ] |
 | **CORE05** | **Multiple Snippets**: Detect and extract all @example blocks when multiple are present in a single source file | Unit tests via @example in `extractor.ts` | [x] | [x ] |
+| **CORE06** | **rootDir Config**: Strip the `rootDir` prefix from source file paths when computing output structure; user-configurable | Unit tests via @example in `config.ts` | [x] | [ ] |
+| **CORE07** | **include / exclude Config**: Accept glob arrays controlling which source files are matched; user-configurable | Unit tests via @example in `config.ts` | [x] | [ ] |
 | **TRANS01** | **Jest Mapper**: Receive all snippets from a source file, generate ONE test file with multiple `it()` blocks (one per snippet) inside a `describe()` block | Unit tests via @example in `builtins.ts` | [x] | [ ] |
 | **TRANS02** | **Vitest Mapper**: Receive all snippets from a source file, generate ONE test file with multiple `test()` blocks (one per snippet) | Unit tests via @example in `builtins.ts` | [x] | [x ] |
-| **TRANS03** | **Output Header**: Include source file path, description, and auto-generated notice in test file header (remove "Snippet:" section) | Unit tests via @example in `builtins.ts` | [x] | [ ] |
-| **TRANS04** | **Output Structure**: Separate imports section from test body; deduplicate imports | Unit tests via @example in `builtins.ts` | [x] | [ ] |
-| **TRANS05** | **Import Path Transformation**: Rewrite relative imports (`./foo.ts`) to be valid from test file location (`../src/foo.js`) | Unit tests via @example in `builtins.ts` | [x] | [ ] |
-| **TRANS06** | **Output Directory Mirroring**: Write generated tests to `outDir` preserving relative directory structure (`src/foo.ts` → `tests/foo.test.ts`) | Integration tests via @example in `config.ts` | [x] | [ ] |
-| **TRANS07** | **File Overwriting**: Overwrite existing test files without prompting; idempotent generation | Integration tests via @example in `config.ts` | [x] | [ ] |
-| **TRANS08** | **Auto Source Import**: Generated test files automatically import all exports from the source file, removing the need for users to manually import the method-under-test in their @example blocks | Unit tests via @example in `builtins.ts` | [x] | [ ] |
+| **TRANS03** | **Output Header**: Include source file path, description, and auto-generated notice in test file header (TODO: split into per-builtin requirements) | Unit tests via @example in `builtins.ts` | [x] | [ ] |
+| **TRANS04** | **Output Structure**: Separate imports section from test body; deduplicate imports (TODO: move to CORE and provide `imports` and `body` to mapper separately) | Unit tests via @example in `builtins.ts` | [x] | [ ] |
+| **TRANS05** | **Import Path Transformation**: Rewrite relative imports in snippets to be valid from the generated test file's location, computed from the relative path between test file and source file (TODO: add config option + decide builtin setting + decide CORE scope and whether import rewrites happen before, during, or after mapping) | Unit tests via @example in `builtins.ts` | [x] | [ ] |
+| **TRANS07** | **File Overwriting**: Overwrite existing test files without prompting; idempotent generation (TODO: add config option + decide builtin setting) | Integration tests via @example in `config.ts` | [x] | [ ] |
+| **TRANS08** | **Auto Source Import**: Generated test files automatically import all exports from the source file, removing the need for users to manually import the method-under-test in their @example blocks (TODO: decide whether this happens before, during, or after mapping) | Unit tests via @example in `builtins.ts` | [x] | [ ] |
+| **TRANS09** | **Jest Built-in Defaults**: If `tsconfig.json` is present at `process.cwd()`, read `rootDir`/`include`/`exclude` from it; otherwise default to `rootDir: './src'`, `include: ['src/**/*']`, `exclude: ['node_modules', 'dist', '**/*.test.ts', '**/*.test.js']`. Output: `<rootDir-relative path>` → `./__tests__/<rootDir-relative path>` | Integration tests via @example in `builtins.ts` | [x] | [ ] |
+| **TRANS10** | **Vitest Built-in Defaults**: If `tsconfig.json` is present at `process.cwd()`, read `rootDir`/`include`/`exclude` from it; otherwise default to `rootDir: './src'`, `include: ['src/**/*']`, `exclude: ['node_modules', 'dist', '**/*.test.ts', '**/*.test.js']`. Output: `<rootDir-relative path>` → `./tests/<rootDir-relative path>` | Integration tests via @example in `builtins.ts` | [x] | [ ] |
 | **META01** | **Self-Testing**: Library generates and runs its own tests via `@example` annotations (dogfooding) | @example in all source files, generated to `tests/` | [x] | [ ] |
 
 **Requirement Notes:**
-- **TRANS05**: When the Vitest/Jest mapper generates tests in `tests/` directory, it must transform `import { x } from './src/foo.ts'` in the snippet to `import { x } from '../src/foo.js'` (or equivalent) in the output
-- **TRANS06**: Config should support `outDir: 'tests'` which mirrors source structure (`src/foo.ts` → `tests/foo.test.ts`)
-- **SDK05**: Config validation should check required fields (`files`, `mapper` or built-in ref) and provide helpful error messages
-
-**TODO — outDir/filepath alignment:**
-> There is a known mismatch between how `outDir` and the mapper's `filepath` interact. Currently `generator.ts` uses only `path.basename(mapper.filepath)` when `outDir` is set, discarding the mapper's directory — this breaks TRANS06 for nested source paths (e.g. `src/utils/foo.ts` → should be `tests/utils/foo.test.ts`, not `tests/foo.test.ts`). Additionally, `generateTests()` in `index.ts` does not expose `outDir` at all, which conflicts with SDK04.
->
-> 1. **Clarify requirements**: Confirm the intended behavior — does `outDir` always mirror the source directory structure relative to cwd, with the mapper's `filepath` only controlling the filename/extension? Or does the mapper own the full path and `outDir` is only a root override?
-> 2. **Scope the fix**: Once agreed, update `generator.ts` to apply `outDir` by mirroring source-relative directory structure, and update `generateTests()` signature to accept an optional `outDir` parameter.
+- **TRANS05**: The mapper must compute the relative path from the generated test file's location to the source file, rewriting snippet imports accordingly (e.g. `import { x } from './foo.ts'` in a snippet becomes `import { x } from '../../src/foo.js'` when the test is generated at `__tests__/x/foo.test.ts` from source `src/x/foo.ts`)
+- **SDK05**: Config validation should check required fields (`include`, `mapper` or built-in ref) and provide helpful error messages
 
 **TODO — unify test helpers:**
 > Test helpers should be grouped by feature, not by calling file. `cleanDir`, `readFile`, `fileExists`, and `runCli` all belong under `test/helpers/environment.ts` (file/directory/CLI environment operations). Any remaining helpers should be reviewed with the user to determine the right feature grouping.
+
+**TODO: examples**
+Add minimal input -> output examples per builtin with project structure, example source file, and expected test file content. These samples should demonstrate the auto-import functionality and path rewriting.
+
+Input:
+```
+src/math/add.ts
+```
+File contents:
+```typescript
+/**
+ * Adds two numbers.
+ * @example
+ * ```ts
+ * expect(add(1, 2)).toBe(3);
+ * ```
+ */
+export function add(a: number, b: number) {
+  return a + b;
+}
+```
+
+Command: `npx example-test-gen --config=vitest`
+
+Output:
+```
+tests/math/add.test.ts
+```
+
+Functions under test are automatically imported from the source file:
+```typescript
+import { describe, it, expect } from 'vitest';
+import { add } from '../../src/math/add.js';
+
+describe('add', () => {
+  it('adds two numbers', () => {
+    expect(add(1, 2)).toBe(3);
+  });
+});
+```
+
+TODO: decide whether to detect and copy *imports* from the source file to the test file (if they are used in the snippet)
+
+Sample of detecting imports:
+
+The src/math.ts test below imports `srs/multiply.ts` outside of the @example and uses it in the @example (note that multiply is not exported in this file):
+
+source file:
+```typescript
+import { multiply } from './multiply.ts';
+
+/**
+ * Adds two numbers.
+ * @example
+ * ```ts
+ * expect(multiply(1, 2)).toBe(2);
+ * ```
+ */
+export function unused(a: number, b: number) {
+  return multiply(a, b);
+}
+```
+
+Command: `npx example-test-gen --config=vitest`
+
+test file:
+```typescript
+import { describe, it, expect } from 'vitest';
+import { multiply } from '../../src/math/multiply.js';
+
+describe('main', () => {
+  it('Adds two numbers', () => {
+    expect(multiply(1, 2)).toBe(2);
+  });
+});
+```
+
+The above examples demonstrate how the tool should detect and copy imports from the source file to the test file when they are used in the @example block. - this is not yet implemented and the requirements are not fully specified. These examples should be used as a reference for future implementation and cleaned up for presentability and readability and clarity once the feature is complete.
