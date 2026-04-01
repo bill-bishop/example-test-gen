@@ -90,7 +90,7 @@ tests/math/add.test.ts
 Functions under test are automatically imported from the source file:
 ```typescript
 import { describe, it, expect } from 'vitest';
-import { add } from '../../src/math/add.js';
+import { add } from '../../src/math/add.ts';
 
 describe('add', () => {
   it('adds two numbers', () => {
@@ -126,7 +126,7 @@ Command: `npx example-test-gen --config=vitest`
 test file:
 ```typescript
 import { describe, it, expect } from 'vitest';
-import { multiply } from '../../src/math/multiply.js';
+import { multiply } from '../../src/math/multiply.ts';
 
 describe('main', () => {
   it('Adds two numbers', () => {
@@ -134,5 +134,51 @@ describe('main', () => {
   });
 });
 ```
+
+The following sample illustrates a case where an import is used in the @example block itself and rewriteImports is set to true, which should rewrite the import path to be relative to the test file's output location:
+
+Input file:
+```
+src/unused.ts
+```
+File contents:
+```typescript
+/**
+ * Does something
+ * @example
+ * ```ts
+ * import { testHelper } from './testHelper.ts';
+ * expect(unused(testHelper(1, 2))).toBe(5);
+ * ```
+ */
+export function unused(data: string) {
+    if (data === 'test') {
+        return 5;
+    }
+    return 10;
+}
+```
+
+Command: `npx example-test-gen --config=vitest --rewrite-imports`
+
+Output:
+```
+tests/unused.test.ts
+```
+
+The test file should have the import path rewritten to be relative to the test file's output location:
+```typescript
+import { describe, it, expect } from 'vitest';
+import { unused } from '../../src/unused.ts';
+import { testHelper } from '../../src/testHelper.ts'; // <-- rewritten to be relative to test file
+
+describe('unused', () => {
+  it('Does something', () => {
+    expect(unused(testHelper(1, 2))).toBe(5);
+  });
+});
+```
+
+
 
 The above examples demonstrate how the tool should detect and copy imports from the source file to the test file when they are used in the @example block. - this is not yet implemented and the requirements are not fully specified. These examples should be used as a reference for future implementation and cleaned up for presentability and readability and clarity once the feature is complete.
