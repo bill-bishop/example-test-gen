@@ -52,3 +52,12 @@ The existing code should be updated to meet these requirements where applicable.
 - **TRANS05**: When the Vitest/Jest mapper generates tests in `tests/` directory, it must transform `import { x } from './src/foo.ts'` in the snippet to `import { x } from '../src/foo.js'` (or equivalent) in the output
 - **TRANS06**: Config should support `outDir: 'tests'` which mirrors source structure (`src/foo.ts` → `tests/foo.test.ts`)
 - **SDK05**: Config validation should check required fields (`files`, `mapper` or built-in ref) and provide helpful error messages
+
+**TODO — outDir/filepath alignment:**
+> There is a known mismatch between how `outDir` and the mapper's `filepath` interact. Currently `generator.ts` uses only `path.basename(mapper.filepath)` when `outDir` is set, discarding the mapper's directory — this breaks TRANS06 for nested source paths (e.g. `src/utils/foo.ts` → should be `tests/utils/foo.test.ts`, not `tests/foo.test.ts`). Additionally, `generateTests()` in `index.ts` does not expose `outDir` at all, which conflicts with SDK04.
+>
+> 1. **Clarify requirements**: Confirm the intended behavior — does `outDir` always mirror the source directory structure relative to cwd, with the mapper's `filepath` only controlling the filename/extension? Or does the mapper own the full path and `outDir` is only a root override?
+> 2. **Scope the fix**: Once agreed, update `generator.ts` to apply `outDir` by mirroring source-relative directory structure, and update `generateTests()` signature to accept an optional `outDir` parameter.
+
+**TODO — unify test helpers:**
+> Test helpers should be grouped by feature, not by calling file. `cleanDir`, `readFile`, `fileExists`, and `runCli` all belong under `test/helpers/environment.ts` (file/directory/CLI environment operations). Any remaining helpers should be reviewed with the user to determine the right feature grouping.
