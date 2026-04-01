@@ -4,17 +4,30 @@ import { GenerateOptions } from './types.js';
  *
  * @example CORE05_generates_one_test_file_with_multiple_tests_per_source
  * ```ts
- * import { cleanDir, generateWithVitest, assertFileContains, listTestFiles } from '../test/helpers/generator.js';
+ * import { cleanDir, listTestFiles, readTestFile } from '../test/helpers/generator.js';
+ * import { generate } from './generator.js';
+ * import { builtInConfigs } from './builtins.js';
+ *
  * cleanDir('tmp');
- * await generateWithVitest('src/cli.ts', 'tmp');
- * expect(listTestFiles('tmp').length).toBe(1);
- * expect(listTestFiles('tmp')).toContain('cli.test.ts');
- * assertFileContains('tmp/cli.test.ts', 'CLI01');
- * assertFileContains('tmp/cli.test.ts', 'CLI02');
- * assertFileContains('tmp/cli.test.ts', 'CLI03');
- * assertFileContains('tmp/cli.test.ts', 'CLI04');
- * assertFileContains('tmp/cli.test.ts', 'CLI05');
- * assertFileContains('tmp/cli.test.ts', 'CLI06');
+ *
+ * await generate({
+ *   pattern: 'src/cli.ts',
+ *   mapper: builtInConfigs.vitest.mapper,
+ *   outDir: 'tmp'
+ * });
+ *
+ * const files = listTestFiles('tmp');
+ * expect(files.length).toBe(1);
+ * expect(files).toContain('cli.test.ts');
+ *
+ * const content = readTestFile('tmp/cli.test.ts');
+ * expect(content).toContain('CLI01');
+ * expect(content).toContain('CLI02');
+ * expect(content).toContain('CLI03');
+ * expect(content).toContain('CLI04');
+ * expect(content).toContain('CLI05');
+ * expect(content).toContain('CLI06');
+ *
  * cleanDir('tmp');
  * ```
  */
