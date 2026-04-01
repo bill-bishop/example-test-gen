@@ -23,8 +23,8 @@ The existing code should be updated to meet these requirements where applicable.
 | ID | Requirement (plain language) | Test Pattern(s) | User Reviewed | Tests Completed |
 |----|------------------------------|-----------------|---------------|-----------|
 | **CLI01** | **CLI Entry**: Executable as `npx example-test-gen` with `--help` and `--version` flags | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] |
-| **CLI02** | **Built-in Configs**: Support `--config=jest` and `--config=vitest` for zero-config test generation | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] |
-| **CLI03** | **Custom Config Path**: Support `--config=./path.mjs` for user-defined config files | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] |
+| **CLI02** | **Built-in Configs**: Support `--config=jest` and `--config=vitest` for zero-config test generation. These builtins use `tsconfig.json` properties (`compilerOptions.rootDir`, `include` and `exclude`) to detect source files.  If no `tsconfig.json` is found, `./src` is used as the rootDir, and all files will be scanned for `@example` tags | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] |
+| **CLI03** | **Custom Config Path**: Support `--config=./path.mjs` for user-defined config files (TODO: switch example to .ts?) | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] |
 | **CLI04** | **CLI Error Handling**: Clear error messages for missing config, invalid config paths, and config load failures | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] |
 | **CLI05** | **CLI Include/Exclude Override**: Support `--include` and `--exclude` flags for ad-hoc file selection (e.g., `--include="src/**/*.ts"`, `--exclude="**/*.test.ts"`) | End-to-end CLI tests via @example in `cli.ts` | [x] | [ ] |
 | **CLI06** | **CLI Output Directory**: Support `--outDir` flag to override the built-in mapper's default output directory (e.g., `--outDir=./generated-tests`) | End-to-end CLI tests via @example in `cli.ts` | [x] | [ ] |
@@ -51,10 +51,6 @@ The existing code should be updated to meet these requirements where applicable.
 | **TRANS09** | **Jest Built-in Defaults**: If `tsconfig.json` is present at `process.cwd()`, read `rootDir`/`include`/`exclude` from it; otherwise default to `rootDir: './src'`, `include: ['src/**/*']`, `exclude: ['node_modules', 'dist', '**/*.test.ts', '**/*.test.js']`. Output: `<rootDir-relative path>` → `./__tests__/<rootDir-relative path>` | Integration tests via @example in `builtins.ts` | [x] | [ ] |
 | **TRANS10** | **Vitest Built-in Defaults**: If `tsconfig.json` is present at `process.cwd()`, read `rootDir`/`include`/`exclude` from it; otherwise default to `rootDir: './src'`, `include: ['src/**/*']`, `exclude: ['node_modules', 'dist', '**/*.test.ts', '**/*.test.js']`. Output: `<rootDir-relative path>` → `./tests/<rootDir-relative path>` | Integration tests via @example in `builtins.ts` | [x] | [ ] |
 | **META01** | **Self-Testing**: Library generates and runs its own tests via `@example` annotations (dogfooding) | @example in all source files, generated to `tests/` | [x] | [ ] |
-
-**Requirement Notes:**
-- **TRANS05**: The mapper must compute the relative path from the generated test file's location to the source file, rewriting snippet imports accordingly (e.g. `import { x } from './foo.ts'` in a snippet becomes `import { x } from '../../src/foo.js'` when the test is generated at `__tests__/x/foo.test.ts` from source `src/x/foo.ts`)
-- **SDK05**: Config validation should check required fields (`include`, `mapper` or built-in ref) and provide helpful error messages
 
 **TODO — unify test helpers:**
 > Test helpers should be grouped by feature, not by calling file. `cleanDir`, `readFile`, `fileExists`, and `runCli` all belong under `test/helpers/environment.ts` (file/directory/CLI environment operations). Any remaining helpers should be reviewed with the user to determine the right feature grouping.
