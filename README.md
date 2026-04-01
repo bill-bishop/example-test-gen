@@ -62,6 +62,8 @@ The existing code should be updated to meet these requirements where applicable.
 **TODO: examples**
 Add minimal input -> output examples per builtin with project structure, example source file, and expected test file content. These samples should demonstrate the auto-import functionality and path rewriting.
 
+The below examples are SAMPLES of what COULD BE. Iterate with the user to refine the requirements and solidify the examples below as well as mapping them to concrete specifications in the above requirements table.
+
 Input:
 ```
 src/math/add.ts
