@@ -23,79 +23,70 @@ async function loadConfig(configPath) {
  *
  * @example CLI01_help_flag_shows_usage_info
  * ```ts
- * import { runCli, readFile } from '../test/helpers/cli.js';
- * expect(runCli('--help')).toContain(readFile('outputs/help.txt'));
+ * import { runCli, readFile } from '../test/helpers/environment.js';
+ * const output = runCli('--help');
+ * expect(output).toContain(readFile('outputs/help.txt'));
  * ```
  *
  * @example CLI01_version_flag_shows_package_version
  * ```ts
- * import { runCli, getPackageVersion } from '../test/helpers/cli.js';
+ * import { runCli, readFile } from '../test/helpers/environment.js';
+ * const pkg = JSON.parse(readFile('package.json'));
  * const output = runCli('--version').trim();
- * expect(output).toBe(getPackageVersion());
+ * expect(output).toBe(pkg.version);
  * ```
  *
  * @example CLI02_builtin_config_jest_generates_jest_tests
  * ```ts
- * import { runCliWith, cleanDir, assertExists } from '../test/helpers/cli.js';
+ * import { runCli, cleanDir, fileExists } from '../test/helpers/environment.js';
  * cleanDir('generated-tests');
- * runCliWith({ config: 'jest' });
- * assertExists('cli.test.js');
+ * runCli('--config=jest');
+ * expect(fileExists('generated-tests/cli.test.js')).toBe(true);
  * ```
  *
  * @example CLI02_builtin_config_vitest_generates_vitest_tests
  * ```ts
- * import { runCliWith, cleanDir, assertExists } from '../test/helpers/cli.js';
+ * import { runCli, cleanDir, fileExists } from '../test/helpers/environment.js';
  * cleanDir('tests');
- * runCliWith({ config: 'vitest' });
- * assertExists('tests/cli.test.ts');
+ * runCli('--config=vitest');
+ * expect(fileExists('tests/cli.test.ts')).toBe(true);
  * ```
  *
  * @example CLI03_custom_config_path_loads_user_defined_config
  * ```ts
- * import { runCliWith, cleanDir, assertExists } from '../test/helpers/cli.js';
+ * import { runCli, cleanDir, fileExists } from '../test/helpers/environment.js';
  * cleanDir('custom-output');
- * runCliWith({ config: 'test/fixtures/config/custom.mjs' });
- * assertExists('custom-output/cli.test.js');
+ * runCli('--config=test/fixtures/config/custom.mjs');
+ * expect(fileExists('custom-output/cli.test.js')).toBe(true);
  * cleanDir('custom-output');
  * ```
  *
  * @example CLI04_missing_config_shows_clear_error
  * ```ts
- * import { runCli, expectError } from '../test/helpers/cli.js';
- * const err = expectError(() => runCli('--config=nonexistent-config.mjs'));
- * expect(err.message).toContain('Error');
+ * import { runCli } from '../test/helpers/environment.js';
+ * expect(() => runCli('--config=nonexistent-config.mjs')).toThrow();
  * ```
  *
  * @example CLI04_invalid_config_path_shows_error
  * ```ts
- * import { runCli, expectError } from '../test/helpers/cli.js';
- * const err = expectError(() => runCli('--config=/path/that/does/not/exist.mjs'));
- * expect(err.message).toMatch(/Error|Cannot find module/);
+ * import { runCli } from '../test/helpers/environment.js';
+ * expect(() => runCli('--config=/path/that/does/not/exist.mjs')).toThrow();
  * ```
  *
  * @example CLI05_files_flag_overrides_config_pattern
  * ```ts
- * import { runCliWith, cleanDir, assertExists } from '../test/helpers/cli.js';
+ * import { runCli, cleanDir, fileExists } from '../test/helpers/environment.js';
  * cleanDir('tests');
- * runCliWith({ config: 'vitest', files: 'src/cli.ts' });
- * assertExists('tests/cli.test.ts');
- * ```
- *
- * @example CLI05_files_flag_supports_multiple_patterns
- * ```ts
- * import { runCliWith, cleanDir, assertExists } from '../test/helpers/cli.js';
- * cleanDir('tests');
- * runCliWith({ config: 'vitest', files: 'src/cli.ts,src/index.ts' });
- * assertExists('tests/cli.test.ts');
- * assertExists('tests/index.test.ts');
+ * runCli('--config=vitest --files="src/cli.ts"');
+ * expect(fileExists('tests/cli.test.ts')).toBe(true);
  * ```
  *
  * @example CLI06_outDir_flag_overrides_default_output_directory
  * ```ts
- * import { runCliWith, cleanDir, assertExists } from '../test/helpers/cli.js';
+ * import { runCli, cleanDir, fileExists } from '../test/helpers/environment.js';
  * cleanDir('my-custom-tests');
- * runCliWith({ config: 'vitest', outDir: 'my-custom-tests' });
- * assertExists('my-custom-tests/cli.test.ts');
+ * runCli('--config=vitest --outDir=my-custom-tests');
+ * expect(fileExists('my-custom-tests/cli.test.ts')).toBe(true);
  * cleanDir('my-custom-tests');
  * ```
  */

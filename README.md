@@ -24,7 +24,7 @@ The existing code should be updated to meet these requirements where applicable.
 |----|------------------------------|-----------------|---------------|-----------|
 | **CLI01** | **CLI Entry**: Executable as `npx example-test-gen` with `--help` and `--version` flags | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] |
 | **CLI02** | **Built-in Configs**: Support `--config=jest` and `--config=vitest` for zero-config test generation. These builtins use `tsconfig.json` properties (`compilerOptions.rootDir`, `include` and `exclude`) to detect source files.  If no `tsconfig.json` is found, `./src` is used as the rootDir, and all files will be scanned for `@example` tags | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] |
-| **CLI03** | **Custom Config Path**: Support `--config=./path.mjs` for user-defined config files (TODO: switch example to .ts?) | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] |
+| **CLI03** | **Custom Config Path**: Support `--config=./path.ts` for user-defined config files | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] |
 | **CLI04** | **CLI Error Handling**: Clear error messages for missing config, invalid config paths, and config load failures | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] |
 | **CLI05** | **CLI Include/Exclude Override**: Support `--include` and `--exclude` flags for ad-hoc file selection (e.g., `--include="src/**/*.ts"`, `--exclude="**/*.test.ts"`) | End-to-end CLI tests via @example in `cli.ts` | [x] | [ ] |
 | **CLI06** | **CLI Output Directory**: Support `--outDir` flag to override the built-in mapper's default output directory (e.g., `--outDir=./generated-tests`) | End-to-end CLI tests via @example in `cli.ts` | [x] | [ ] |
@@ -43,7 +43,7 @@ The existing code should be updated to meet these requirements where applicable.
 | **CORE07** | **include / exclude Config**: Accept glob arrays controlling which source files are matched; user-configurable | Unit tests via @example in `config.ts` | [x] | [ ] |
 | **TRANS01** | **Jest Mapper**: Receive all snippets from a source file, generate ONE test file with multiple `it()` blocks (one per snippet) inside a `describe()` block | Unit tests via @example in `builtins.ts` | [x] | [ ] |
 | **TRANS02** | **Vitest Mapper**: Receive all snippets from a source file, generate ONE test file with multiple `test()` blocks (one per snippet) | Unit tests via @example in `builtins.ts` | [x] | [x ] |
-| **TRANS03** | **Output Header**: Include source file path, description, and auto-generated notice in test file header (TODO: split into per-builtin requirements) | Unit tests via @example in `builtins.ts` | [x] | [ ] |
+| **TRANS03** | **Output Header**: (Both Builtins) Include source file path, description, and auto-generated notice in test file header | Unit tests via @example in `builtins.ts` | [x] | [ ] |
 | **TRANS04** | **Output Structure**: Separate imports section from test body; deduplicate imports (TODO: move to CORE and provide `imports` and `body` to mapper separately) | Unit tests via @example in `builtins.ts` | [x] | [ ] |
 | **TRANS05** | **Import Path Transformation**: Rewrite relative imports in snippets to be valid from the generated test file's location, computed from the relative path between test file and source file (TODO: add config option + decide builtin setting + decide CORE scope and whether import rewrites happen before, during, or after mapping) | Unit tests via @example in `builtins.ts` | [x] | [ ] |
 | **TRANS07** | **File Overwriting**: Overwrite existing test files without prompting; idempotent generation (TODO: add config option + decide builtin setting) | Integration tests via @example in `config.ts` | [x] | [ ] |
@@ -52,8 +52,20 @@ The existing code should be updated to meet these requirements where applicable.
 | **TRANS10** | **Vitest Built-in Defaults**: If `tsconfig.json` is present at `process.cwd()`, read `rootDir`/`include`/`exclude` from it; otherwise default to `rootDir: './src'`, `include: ['src/**/*']`, `exclude: ['node_modules', 'dist', '**/*.test.ts', '**/*.test.js']`. Output: `<rootDir-relative path>` → `./tests/<rootDir-relative path>` | Integration tests via @example in `builtins.ts` | [x] | [ ] |
 | **META01** | **Self-Testing**: Library generates and runs its own tests via `@example` annotations (dogfooding) | @example in all source files, generated to `tests/` | [x] | [ ] |
 
-**TODO — unify test helpers:**
-> Test helpers should be grouped by feature, not by calling file. `cleanDir`, `readFile`, `fileExists`, and `runCli` all belong under `test/helpers/environment.ts` (file/directory/CLI environment operations). Any remaining helpers should be reviewed with the user to determine the right feature grouping.
+## Adding Tests
+
+Guidelines for contributing new tests:
+
+**DO:**
+- DO Use existing or new helpers to keep tests highly readable
+- DO reference existing tests which the user agrees are good examples
+- DO Iterate on test patterns with the user before making changes to ensure alignment on beauty, readability, and modularity
+
+**DON'T:**
+- DO NOT Clutter the helpers directory with redundant functions
+- DO NOT Clutter @examples with child_process or fs operations
+- DO NOT Tuck away **assertions** or **method-under-test** calls into helpers as it harms readability and debuggability
+
 
 **TODO: examples**
 Add minimal input -> output examples per builtin with project structure, example source file, and expected test file content. These samples should demonstrate the auto-import functionality and path rewriting.

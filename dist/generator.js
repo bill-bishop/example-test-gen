@@ -10,6 +10,24 @@ const extractor_js_1 = require("./extractor.js");
 /**
  * Generates test files from @example snippets
  *
+ * @example SDK01_generateTests_produces_output_file_from_pattern
+ * ```ts
+ * // TODO: revisit this test after clarifying outDir/filepath alignment (see README TODO)
+ * import { generate } from './generator.ts';
+ * import { builtInConfigs } from './builtins.ts';
+ * import { cleanDir, fileExists, readFile } from '../test/helpers/environment.js';
+ *
+ * cleanDir('tmp');
+ * await generate({
+ *   pattern: 'src/extractor.ts',
+ *   mapper: builtInConfigs.vitest.mapper,
+ *   outDir: 'tmp'
+ * });
+ * expect(fileExists('tmp/extractor.test.ts')).toBe(true);
+ * expect(readFile('tmp/extractor.test.ts')).toContain('extracts snippets correctly');
+ * cleanDir('tmp');
+ * ```
+ *
  * @example CORE05_generates_one_test_file_with_multiple_tests_per_source
  * ```ts
  * import { cleanDir, listTestFiles, readTestFile } from '../test/helpers/generator.js';
