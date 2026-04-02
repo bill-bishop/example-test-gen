@@ -2,7 +2,7 @@
 
 ## Description
 
-Generated test files automatically import all exports from the source file, removing the need for users to manually import the method-under-test in their @example blocks.
+Generated test files automatically detect & import all *used* exports from the source file, removing the need for users to manually import the methods-under-test in their @example blocks.
 
 ## Original Requirement
 
@@ -16,7 +16,7 @@ Generated test files automatically import all exports from the source file, remo
 
 ## Notes
 
-Decision needed on whether this happens before, during, or after mapping. Currently marked as implemented but may need refinement.
+Decision needed on whether this happens before, during, or after mapping. Currently marked as implemented but existing implementation just imports * as the source file name.
 
 ### Example
 
