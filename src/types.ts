@@ -1,3 +1,18 @@
+/**
+ * Information about an extracted code snippet
+ * @example SDK02_snippetInfo_type_usage
+ * ```ts
+ * const snippet: SnippetInfo = {
+ *   imports: ["import { foo } from './bar';"],
+ *   snippet: "expect(foo()).toBe(42);",
+ *   description: "test example",
+ *   dir: "src",
+ *   filename: "example.ts"
+ * };
+ * expect(snippet.imports).toHaveLength(1);
+ * expect(snippet.dir).toBe("src");
+ * ```
+ */
 export interface SnippetInfo {
   imports: string[];
   snippet: string;
@@ -6,16 +21,61 @@ export interface SnippetInfo {
   filename: string;
 }
 
+/**
+ * Result returned by a mapper function
+ * @example SDK02_mapperResult_type_usage
+ * ```ts
+ * const result: MapperResult = {
+ *   output: "describe('test', () => { it('works', () => {}); });",
+ *   filepath: "test/example.test.ts"
+ * };
+ * expect(result.output).toContain("describe");
+ * expect(result.filepath).toMatch(/\.test\.ts$/);
+ * ```
+ */
 export interface MapperResult {
   output: string;
   filepath: string;
 }
 
+/**
+ * Mapper function type that transforms snippets into test output
+ * @example SDK02_mapperFunction_type_usage
+ * ```ts
+ * const myMapper: MapperFunction = (snippets) => {
+ *   if (snippets.length === 0) return null;
+ *   return {
+ *     output: `// ${snippets.length} tests`,
+ *     filepath: "output.test.ts"
+ *   };
+ * };
+ * expect(typeof myMapper).toBe("function");
+ * const result = myMapper([]);
+ * expect(result).toBeNull();
+ * ```
+ */
 export type MapperFunction = (info: SnippetInfo[]) => MapperResult | null | Promise<MapperResult | null>;
 
 /** @alias MapperFunction - shorter alias for convenience */
 export type MapperFn = MapperFunction;
 
+/**
+ * Options for test generation
+ * @example SDK02_generateOptions_type_usage
+ * ```ts
+ * const options: GenerateOptions = {
+ *   include: "src/**\/*.ts",
+ *   exclude: ["**\/*.test.ts", "node_modules/**"],
+ *   mapper: (snippets) => null,
+ *   cwd: ".",
+ *   outDir: "tests",
+ *   rootDir: "./src",
+ *   overwrite: true
+ * };
+ * expect(Array.isArray(options.exclude)).toBe(true);
+ * expect(options.overwrite).toBe(true);
+ * ```
+ */
 export interface GenerateOptions {
   include: string | string[];
   exclude?: string | string[];
@@ -30,6 +90,22 @@ export interface GenerateOptions {
 }
 
 /** @deprecated Use GenerateOptions instead - maintained for backwards compatibility */
+/**
+ * Configuration interface for CLI usage (deprecated, use GenerateOptions)
+ * @example SDK02_config_type_usage
+ * ```ts
+ * const config: Config = {
+ *   include: ["src/**\/*.ts"],
+ *   exclude: ["**\/*.test.ts"],
+ *   rootDir: "./src",
+ *   mapper: "jest",
+ *   outDir: "generated",
+ *   overwrite: false
+ * };
+ * expect(config.mapper).toBe("jest");
+ * expect(Array.isArray(config.include)).toBe(true);
+ * ```
+ */
 export interface Config {
   /** File patterns to include */
   include: string[];

@@ -110,6 +110,15 @@ async function loadConfigAndValidate(configPath: string, cwd: string): Promise<C
  * expect(fileExists('my-custom-tests/cli.test.ts')).toBe(true);
  * cleanDir('my-custom-tests');
  * ```
+ * @example CLI07_rootDir_flag_overrides_source_root
+ * ```ts
+ * import { runCli, cleanDir, fileExists } from '../test/helpers/environment.js';
+ * cleanDir('root-tests');
+ * runCli('--config=vitest --root-dir=src --outDir=root-tests');
+ * // Files should be generated relative to the rootDir
+ * expect(fileExists('root-tests/cli.test.ts')).toBe(true);
+ * cleanDir('root-tests');
+ * ```
  */
 async function main() {
   const args = process.argv.slice(2);

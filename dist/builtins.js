@@ -23,6 +23,22 @@ const path_1 = __importDefault(require("path"));
  * rmDir(testDir);
  * ```
  */
+/**
+ * @example TRANS09_jest_uses_tsconfig_defaults
+ * ```ts
+ * import { resolveBuiltInConfig } from './builtins.ts';
+ * import { mkTempDir, writeFile, rmDir } from '../test/helpers/environment.js';
+ * const testDir = mkTempDir('jest-defaults-test');
+ * writeFile(`${testDir}/tsconfig.json`, JSON.stringify({
+ *   compilerOptions: { rootDir: './source' },
+ *   include: ['source/**\\/*']
+ * }));
+ * const config = await resolveBuiltInConfig('jest', testDir);
+ * expect(config.rootDir).toBe('./source');
+ * expect(config.include).toContain('source/**\/*');
+ * rmDir(testDir);
+ * ```
+ */
 async function readTsConfig(cwd) {
     try {
         const tsconfigPath = path_1.default.join(cwd, 'tsconfig.json');
@@ -43,6 +59,58 @@ async function resolveBuiltInConfig(name, cwd) {
     return { include, exclude, mapper, rootDir };
 }
 function createJestMapper() {
+    /**
+     * @example TRANS01_createJestMapper_generates_test_file_with_it_blocks
+     * ```ts
+     * import { createJestMapper } from './builtins.ts';
+     * const mapper = createJestMapper();
+     * const snippets = [
+     *   { imports: [], snippet: "expect(1 + 1).toBe(2);", description: "addition works", dir: "src", filename: "math.ts" }
+     * ];
+     * const result = mapper(snippets);
+     * expect(result).not.toBeNull();
+     * expect(result!.output).toContain("describe");
+     * expect(result!.output).toContain("it('addition works'");
+     * expect(result!.output).toContain("expect(1 + 1).toBe(2)");
+     * expect(result!.filepath).toBe("src/math.test.js");
+     * ```
+     * @example TRANS03_includes_source_path_and_notice_in_header
+     * ```ts
+     * import { createJestMapper } from './builtins.ts';
+     * const mapper = createJestMapper();
+     * const snippets = [
+     *   { imports: [], snippet: "expect(true).toBe(true);", description: "test", dir: "lib", filename: "utils.ts" }
+     * ];
+     * const result = mapper(snippets);
+     * expect(result!.output).toContain("Auto-generated test file from @example snippets");
+     * expect(result!.output).toContain("Source: lib/utils.ts");
+     * expect(result!.output).toContain("Generated:");
+     * ```
+     * @example TRANS04_deduplicates_imports_in_generated_tests
+     * ```ts
+     * import { createJestMapper } from './builtins.ts';
+     * const mapper = createJestMapper();
+     * const snippets = [
+     *   { imports: ["import { foo } from './bar';"], snippet: "foo();", description: "test1", dir: "src", filename: "test.ts" },
+     *   { imports: ["import { foo } from './bar';"], snippet: "foo();", description: "test2", dir: "src", filename: "test.ts" }
+     * ];
+     * const result = mapper(snippets);
+     * // Should only have one import of './bar' even though both snippets have it
+     * const importMatches = result!.output.match(/from '.*bar'/g);
+     * expect(importMatches).toHaveLength(1);
+     * ```
+     * @example TRANS08_auto_imports_source_file_exports
+     * ```ts
+     * import { createJestMapper } from './builtins.ts';
+     * const mapper = createJestMapper();
+     * const snippets = [
+     *   { imports: [], snippet: "expect(true).toBe(true);", description: "test", dir: "src", filename: "example.ts" }
+     * ];
+     * const result = mapper(snippets);
+     * // Should include auto-import of source file
+     * expect(result!.output).toContain("import * as example from './src/example.ts';");
+     * ```
+     */
     return (snippets) => {
         if (snippets.length === 0)
             return null;
@@ -74,6 +142,24 @@ function createJestMapper() {
     };
 }
 function createVitestMapper() {
+    /**
+     * @example TRANS10_vitest_uses_tsconfig_defaults
+     * ```ts
+     * import { resolveBuiltInConfig } from './builtins.ts';
+     * import { mkTempDir, writeFile, rmDir } from '../test/helpers/environment.js';
+     * const testDir = mkTempDir('vitest-defaults-test');
+     * writeFile(`${testDir}/tsconfig.json`, JSON.stringify({
+     *   compilerOptions: { rootDir: './lib' },
+     *   include: ['lib/**\\/*'],
+     *   exclude: ['**\\/*.test.ts']
+     * }));
+     * const config = await resolveBuiltInConfig('vitest', testDir);
+     * expect(config.rootDir).toBe('./lib');
+     * expect(config.include).toContain('lib/**\/*');
+     * expect(config.exclude).toContain('**\/*.test.ts');
+     * rmDir(testDir);
+     * ```
+     */
     return (snippets) => {
         if (snippets.length === 0)
             return null;

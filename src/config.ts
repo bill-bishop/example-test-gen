@@ -174,6 +174,13 @@ export async function loadConfig(configPath: string, cwd: string): Promise<Confi
 /**
  * Creates a Config object from CLI flags
  * @example SDK04_builds_config_from_cli_flags
+ * @example TRANS07_overwrite_flag_allows_idempotent_generation
+ * ```ts
+ * import { buildConfigFromFlags } from './config.ts';
+ * const baseConfig = { include: ['src/**\/*.ts'], mapper: 'vitest' as const };
+ * const config = buildConfigFromFlags({ overwrite: true }, baseConfig);
+ * expect(config.overwrite).toBe(true);
+ * ```
  */
 export function buildConfigFromFlags(
   flags: {
