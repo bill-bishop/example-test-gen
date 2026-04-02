@@ -13,6 +13,9 @@ export interface MapperResult {
 
 export type MapperFunction = (info: SnippetInfo[]) => MapperResult | null | Promise<MapperResult | null>;
 
+/** @alias MapperFunction - shorter alias for convenience */
+export type MapperFn = MapperFunction;
+
 export interface GenerateOptions {
   include: string | string[];
   exclude?: string | string[];

@@ -5,17 +5,22 @@ import { pathToFileURL } from 'url';
 import { generate } from './generator.js';
 import { MapperFunction } from './types.js';
 import { builtInConfigs } from './builtins.js';
+import { Config, validateConfigAsync, buildConfigFromFlags, loadConfig } from './config.js';
 
-async function loadConfig(configPath: string, cwd: string): Promise<{ mapper: MapperFunction; include: string | string[]; exclude?: string | string[]; rootDir?: string }> {
+async function loadConfigAndValidate(configPath: string, cwd: string): Promise<Config> {
   // Check for built-in configs first
   if (configPath === 'jest' || configPath === 'vitest') {
-    return builtInConfigs[configPath](cwd);
+    const { resolveBuiltInConfig } = await import('./builtins.js');
+    const resolved = await resolveBuiltInConfig(configPath, cwd);
+    return {
+      include: Array.isArray(resolved.include) ? resolved.include : [resolved.include],
+      exclude: Array.isArray(resolved.exclude) ? resolved.exclude : resolved.exclude ? [resolved.exclude] : undefined,
+      rootDir: resolved.rootDir,
+      mapper: configPath
+    };
   }
   
-  const resolvedPath = path.resolve(configPath);
-  const fileUrl = pathToFileURL(resolvedPath).href;
-  const module = await import(fileUrl);
-  return module.default || module;
+  return loadConfig(configPath, cwd);
 }
 
 /**
@@ -147,14 +152,37 @@ async function main() {
   const rootDir = rootDirFlag ? rootDirFlag.replace('--root-dir=', '') : undefined;
   
   try {
-    const config = await loadConfig(configPath, cwd);
+    // Load base config
+    const baseConfig = await loadConfigAndValidate(configPath, cwd);
+    
+    // Build final config from CLI flags
+    const finalConfig = buildConfigFromFlags(
+      { include, exclude, outDir, rootDir },
+      baseConfig
+    );
+    
+    // Validate final config (SDK05: Config Validation)
+    const validation = await validateConfigAsync(finalConfig, cwd);
+    if (!validation.valid) {
+      console.error('Config validation failed:');
+      validation.errors.forEach(err => console.error(`  - ${err}`));
+      process.exit(1);
+    }
+    
+    // Resolve mapper if it's a builtin name
+    let mapper: MapperFunction;
+    if (typeof finalConfig.mapper === 'function') {
+      mapper = finalConfig.mapper;
+    } else {
+      mapper = builtInConfigs[finalConfig.mapper].mapper;
+    }
     
     await generate({
-      include: include ?? config.include,
-      exclude: exclude ?? config.exclude,
-      mapper: config.mapper,
-      outDir,
-      rootDir: rootDir ?? config.rootDir,
+      include: finalConfig.include,
+      exclude: finalConfig.exclude,
+      mapper,
+      outDir: finalConfig.outDir,
+      rootDir: finalConfig.rootDir,
       cwd
     });
     console.log('Test files generated successfully');

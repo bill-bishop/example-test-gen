@@ -20,7 +20,7 @@ async function readTsConfig(cwd: string): Promise<TsConfig | null> {
   }
 }
 
-export async function resolveBuiltInConfig(name: 'jest' | 'vitest', cwd: string): Promise<{ include: string | string[]; exclude: string | string[]; mapper: MapperFunction }> {
+export async function resolveBuiltInConfig(name: 'jest' | 'vitest', cwd: string): Promise<{ include: string | string[]; exclude: string | string[]; mapper: MapperFunction; rootDir: string }> {
   const tsconfig = await readTsConfig(cwd);
   
   // Default values
@@ -30,7 +30,7 @@ export async function resolveBuiltInConfig(name: 'jest' | 'vitest', cwd: string)
   
   const mapper = name === 'jest' ? createJestMapper() : createVitestMapper();
   
-  return { include, exclude, mapper };
+  return { include, exclude, mapper, rootDir };
 }
 
 export function createJestMapper(): MapperFunction {
@@ -99,7 +99,21 @@ export function createVitestMapper(): MapperFunction {
   };
 }
 
+/**
+ * Loads a built-in mapper by name
+ * @example SDK03_loads_jest_builtin_mapper
+ * @example SDK03_loads_vitest_builtin_mapper
+ */
+export async function loadBuiltInMapper(name: 'jest' | 'vitest', cwd: string): Promise<MapperFunction> {
+  const config = await resolveBuiltInConfig(name, cwd);
+  return config.mapper;
+}
+
+/**
+ * Built-in configurations for SDK consumers
+ * @example SDK03_exports_builtInConfigs_with_jest_and_vitest
+ */
 export const builtInConfigs = {
-  jest: (cwd: string) => resolveBuiltInConfig('jest', cwd),
-  vitest: (cwd: string) => resolveBuiltInConfig('vitest', cwd)
+  jest: { mapper: createJestMapper(), name: 'jest' as const },
+  vitest: { mapper: createVitestMapper(), name: 'vitest' as const }
 };
