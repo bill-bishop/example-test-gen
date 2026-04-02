@@ -27,6 +27,6 @@ import { SnippetInfo } from './types.js';
  * expect(snippets.length).toBeGreaterThan(1);
  * ```
  */
-export declare function extractSnippets(filePath: string, cwd: string): Promise<SnippetInfo[]>;
-export declare function findFiles(patterns: string | string[], cwd: string): AsyncGenerator<string>;
+export declare function extractSnippets(filePath: string, cwd: string, rootDir?: string): Promise<SnippetInfo[]>;
+export declare function findFiles(patterns: string | string[], exclude: string | string[] | undefined, cwd: string): AsyncGenerator<string>;
 //# sourceMappingURL=extractor.d.ts.map

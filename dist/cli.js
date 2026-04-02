@@ -4,19 +4,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const fs_1 = require("fs");
 const path_1 = __importDefault(require("path"));
-const url_1 = require("url");
 const generator_js_1 = require("./generator.js");
 const builtins_js_1 = require("./builtins.js");
-async function loadConfig(configPath) {
+const config_js_1 = require("./config.js");
+async function loadConfigAndValidate(configPath, cwd) {
     // Check for built-in configs first
-    if (builtins_js_1.builtInConfigs[configPath]) {
-        return builtins_js_1.builtInConfigs[configPath];
+    if (configPath === 'jest' || configPath === 'vitest') {
+        const { resolveBuiltInConfig } = await import('./builtins.js');
+        const resolved = await resolveBuiltInConfig(configPath, cwd);
+        return {
+            include: Array.isArray(resolved.include) ? resolved.include : [resolved.include],
+            exclude: Array.isArray(resolved.exclude) ? resolved.exclude : resolved.exclude ? [resolved.exclude] : undefined,
+            rootDir: resolved.rootDir,
+            mapper: configPath
+        };
     }
-    const resolvedPath = path_1.default.resolve(configPath);
-    const fileUrl = (0, url_1.pathToFileURL)(resolvedPath).href;
-    const module = await import(fileUrl);
-    return module.default || module;
+    return (0, config_js_1.loadConfig)(configPath, cwd);
 }
 /**
  * CLI entry point for example-test-gen
@@ -73,12 +78,21 @@ async function loadConfig(configPath) {
  * expect(() => runCli('--config=/path/that/does/not/exist.mjs')).toThrow();
  * ```
  *
- * @example CLI05_files_flag_overrides_config_pattern
+ * @example CLI05_include_flag_overrides_config_pattern
  * ```ts
  * import { runCli, cleanDir, fileExists } from '../test/helpers/environment.js';
  * cleanDir('tests');
- * runCli('--config=vitest --files="src/cli.ts"');
+ * runCli('--config=vitest --include="src/cli.ts"');
  * expect(fileExists('tests/cli.test.ts')).toBe(true);
+ * ```
+ *
+ * @example CLI05_exclude_flag_filters_out_files
+ * ```ts
+ * import { runCli, cleanDir, fileExists } from '../test/helpers/environment.js';
+ * cleanDir('tests');
+ * runCli('--config=vitest --include="src/*.ts" --exclude="**\/cli.ts"');
+ * expect(fileExists('tests/cli.test.ts')).toBe(false);
+ * expect(fileExists('tests/builtins.test.ts')).toBe(true);
  * ```
  *
  * @example CLI06_outDir_flag_overrides_default_output_directory
@@ -92,11 +106,61 @@ async function loadConfig(configPath) {
  */
 async function main() {
     const args = process.argv.slice(2);
+    const cwd = process.cwd();
+    // Handle help and version flags
+    if (args.includes('--help')) {
+        const helpPath = path_1.default.resolve(cwd, 'outputs/help.txt');
+        const helpText = await fs_1.promises.readFile(helpPath, 'utf-8');
+        console.log(helpText);
+        process.exit(0);
+    }
+    if (args.includes('--version')) {
+        const pkgPath = path_1.default.resolve(cwd, 'package.json');
+        const pkg = JSON.parse(await fs_1.promises.readFile(pkgPath, 'utf-8'));
+        console.log(pkg.version);
+        process.exit(0);
+    }
     const configFlag = args.find((arg) => arg.startsWith('--config='));
     const configPath = configFlag ? configFlag.replace('--config=', '') : 'example-test-gen.config.mjs';
+    const includeFlag = args.find((arg) => arg.startsWith('--include='));
+    const include = includeFlag ? includeFlag.replace('--include=', '') : undefined;
+    const excludeFlag = args.find((arg) => arg.startsWith('--exclude='));
+    const exclude = excludeFlag ? excludeFlag.replace('--exclude=', '') : undefined;
+    const outDirFlag = args.find((arg) => arg.startsWith('--outDir='));
+    const outDir = outDirFlag ? outDirFlag.replace('--outDir=', '') : undefined;
+    const rootDirFlag = args.find((arg) => arg.startsWith('--root-dir='));
+    const rootDir = rootDirFlag ? rootDirFlag.replace('--root-dir=', '') : undefined;
+    const overwriteFlag = args.find((arg) => arg.startsWith('--overwrite'));
+    const overwrite = overwriteFlag !== undefined;
     try {
-        const { mapper, pattern } = await loadConfig(configPath);
-        await (0, generator_js_1.generate)({ pattern, mapper });
+        // Load base config
+        const baseConfig = await loadConfigAndValidate(configPath, cwd);
+        // Build final config from CLI flags
+        const finalConfig = (0, config_js_1.buildConfigFromFlags)({ include, exclude, outDir, rootDir, overwrite }, baseConfig);
+        // Validate final config (SDK05: Config Validation)
+        const validation = await (0, config_js_1.validateConfigAsync)(finalConfig, cwd);
+        if (!validation.valid) {
+            console.error('Config validation failed:');
+            validation.errors.forEach(err => console.error(`  - ${err}`));
+            process.exit(1);
+        }
+        // Resolve mapper if it's a builtin name
+        let mapper;
+        if (typeof finalConfig.mapper === 'function') {
+            mapper = finalConfig.mapper;
+        }
+        else {
+            mapper = builtins_js_1.builtInConfigs[finalConfig.mapper].mapper;
+        }
+        await (0, generator_js_1.generate)({
+            include: finalConfig.include,
+            exclude: finalConfig.exclude,
+            mapper,
+            outDir: finalConfig.outDir,
+            rootDir: finalConfig.rootDir,
+            overwrite: finalConfig.overwrite,
+            cwd
+        });
         console.log('Test files generated successfully');
     }
     catch (err) {

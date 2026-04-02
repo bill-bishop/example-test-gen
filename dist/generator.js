@@ -30,9 +30,9 @@ const extractor_js_1 = require("./extractor.js");
  *
  * @example CORE05_generates_one_test_file_with_multiple_tests_per_source
  * ```ts
- * import { cleanDir, listTestFiles, readTestFile } from '../test/helpers/generator.js';
- * import { generate } from './generator.js';
- * import { builtInConfigs } from './builtins.js';
+ * import { cleanDir, listTestFiles, readFile } from '../test/helpers/environment.js';
+ * import { generate } from './generator.ts';
+ * import { builtInConfigs } from './builtins.ts';
  *
  * cleanDir('tmp');
  *
@@ -46,7 +46,7 @@ const extractor_js_1 = require("./extractor.js");
  * expect(files.length).toBe(1);
  * expect(files).toContain('cli.test.ts');
  *
- * const content = readTestFile('tmp/cli.test.ts');
+ * const content = readFile('tmp/cli.test.ts');
  * expect(content).toContain('CLI01');
  * expect(content).toContain('CLI02');
  * expect(content).toContain('CLI03');
@@ -58,9 +58,9 @@ const extractor_js_1 = require("./extractor.js");
  * ```
  */
 async function generate(options) {
-    const { pattern, mapper, cwd = process.cwd(), outDir } = options;
-    for await (const filePath of (0, extractor_js_1.findFiles)(pattern, cwd)) {
-        const snippets = await (0, extractor_js_1.extractSnippets)(filePath, cwd);
+    const { include, exclude, mapper, cwd = process.cwd(), outDir, rootDir, overwrite } = options;
+    for await (const filePath of (0, extractor_js_1.findFiles)(include, exclude, cwd)) {
+        const snippets = await (0, extractor_js_1.extractSnippets)(filePath, cwd, rootDir);
         if (snippets.length === 0)
             continue;
         const result = await mapper(snippets);
@@ -73,6 +73,17 @@ async function generate(options) {
         const absoluteOutputPath = path_1.default.resolve(cwd, finalRelativePath);
         const outputDir = path_1.default.dirname(absoluteOutputPath);
         await fs_1.promises.mkdir(outputDir, { recursive: true });
+        // Check if file exists and overwrite is not enabled
+        if (!overwrite) {
+            try {
+                await fs_1.promises.access(absoluteOutputPath);
+                // File exists, skip
+                continue;
+            }
+            catch {
+                // File doesn't exist, proceed with writing
+            }
+        }
         await fs_1.promises.writeFile(absoluteOutputPath, output, 'utf-8');
     }
 }

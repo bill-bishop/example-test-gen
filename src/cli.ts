@@ -106,29 +106,15 @@ async function loadConfigAndValidate(configPath: string, cwd: string): Promise<C
  */
 async function main() {
   const args = process.argv.slice(2);
+  const cwd = process.cwd();
   
   // Handle help and version flags
   if (args.includes('--help')) {
-    console.log('Usage: npx example-test-gen [options]');
-    console.log('');
-    console.log('Options:');
-    console.log('  --config=<name|path>   Built-in config (jest|vitest) or custom config file path');
-    console.log('  --include=<pattern>    File pattern(s) to include (overrides config)');
-    console.log('  --exclude=<pattern>    File pattern(s) to exclude (overrides config)');
-    console.log('  --outDir=<dir>         Output directory for generated tests');
-    console.log('  --root-dir=<dir>       Root directory for finding source files');
-    console.log('  --overwrite            Overwrite existing test files without prompting');
-    console.log('  --help                 Show this help message');
-    console.log('  --version              Show package version');
-    console.log('');
-    console.log('Examples:');
-    console.log('  npx example-test-gen --config=vitest');
-    console.log('  npx example-test-gen --config=jest --include="src/**/*.ts"');
-    console.log('  npx example-test-gen --config=./my-config.mjs --outDir=./tests');
+    const helpPath = path.resolve(cwd, 'outputs/help.txt');
+    const helpText = await fs.readFile(helpPath, 'utf-8');
+    console.log(helpText);
     process.exit(0);
   }
-  
-  const cwd = process.cwd();
   
   if (args.includes('--version')) {
     const pkgPath = path.resolve(cwd, 'package.json');

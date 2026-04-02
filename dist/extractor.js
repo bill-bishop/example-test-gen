@@ -36,9 +36,17 @@ const EXAMPLE_REGEX = /@example(?:\s+([^\n`]+))?\s*\n?\s*(?:\*\s*)?```[a-z]*\n?(
  * expect(snippets.length).toBeGreaterThan(1);
  * ```
  */
-async function extractSnippets(filePath, cwd) {
+async function extractSnippets(filePath, cwd, rootDir) {
     const content = await fs_1.promises.readFile(filePath, 'utf-8');
-    const dir = path_1.default.dirname(path_1.default.relative(cwd, filePath));
+    // Compute relative path considering rootDir if provided
+    let relativePath = path_1.default.relative(cwd, filePath);
+    if (rootDir) {
+        const rootDirPath = path_1.default.resolve(cwd, rootDir);
+        if (filePath.startsWith(rootDirPath)) {
+            relativePath = path_1.default.relative(rootDirPath, filePath);
+        }
+    }
+    const dir = path_1.default.dirname(relativePath);
     const filename = path_1.default.basename(filePath);
     const snippets = [];
     let match;
@@ -68,9 +76,10 @@ async function extractSnippets(filePath, cwd) {
     }
     return snippets;
 }
-async function* findFiles(patterns, cwd) {
+async function* findFiles(patterns, exclude, cwd) {
     const fg = await import('fast-glob');
-    const files = await fg.default(patterns, { cwd, absolute: true });
+    const ignore = exclude ? (Array.isArray(exclude) ? exclude : [exclude]) : undefined;
+    const files = await fg.default(patterns, { cwd, absolute: true, ignore });
     for (const file of files) {
         yield file;
     }

@@ -1,12 +1,16 @@
 Usage: npx example-test-gen [options]
 
 Options:
-  --config=<name|path>  Use built-in config (jest|vitest) or path to custom .mjs file
-  --files=<pattern>     Override config file patterns (e.g., "src/**/*.ts" or "src/a.ts,src/b.ts")
-  --outDir=<path>       Output directory for generated tests (default: tests)
-  --help                Show this help message
-  --version             Show version number
+  --config=<name|path>   Built-in config (jest|vitest) or custom config file path
+  --include=<pattern>    File pattern(s) to include (overrides config)
+  --exclude=<pattern>    File pattern(s) to exclude (overrides config)
+  --outDir=<dir>         Output directory for generated tests
+  --root-dir=<dir>       Root directory for finding source files
+  --overwrite            Overwrite existing test files without prompting
+  --help                 Show this help message
+  --version              Show package version
 
 Examples:
-  npx example-test-gen --config=jest
-  npx example-test-gen --config=./my-config.mjs --files="src/**/*.ts" --outDir=./tests
+  npx example-test-gen --config=vitest
+  npx example-test-gen --config=jest --include="src/**/*.ts"
+  npx example-test-gen --config=./my-config.mjs --outDir=./tests
