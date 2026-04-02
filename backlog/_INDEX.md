@@ -6,6 +6,7 @@ This directory contains backlog items - features, improvements, and technical de
 
 | Feature | Description | Priority | Status |
 |---------|-------------|----------|--------|
+| [Fill Test Gaps](./ready/fill-test-gaps.md) | Document and fill missing @example test coverage | Medium | In Progress |
 | [Import Deduplication](./needs_grooming/import-deduplication.md) | Fix duplicate imports in generated test files | High | Partially implemented |
 | [Auto Source Import](./needs_grooming/auto-source-import.md) | Auto-import exports from source files in generated tests | Medium | Implemented, needs refinement |
 | [Import Path Transformation](./needs_grooming/import-path-transformation.md) | Rewrite relative import paths for test file locations | Medium | Not implemented |
