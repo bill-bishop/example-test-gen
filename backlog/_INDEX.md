@@ -9,9 +9,10 @@ This directory contains backlog items - features, improvements, and technical de
 | [Import Deduplication](./import-deduplication.md) | Fix duplicate imports in generated test files | High | Partially implemented |
 | [Auto Source Import](./auto-source-import.md) | Auto-import exports from source files in generated tests | Medium | Implemented, needs refinement |
 | [Import Path Transformation](./import-path-transformation.md) | Rewrite relative import paths for test file locations | Medium | Not implemented |
+| [Documentation Refactor](./documentation-refactor.md) | Break requirements into CLI, SDK, and internal docs | Medium | Not started |
 | [Jest Tests Directory](./jest-tests-directory.md) | Post-MVP: Output Jest tests to `__tests__/` folder | Low | Post-MVP |
 | [Vitest Tests Directory](./vitest-tests-directory.md) | Post-MVP: Output Vitest tests to `tests/` folder | Low | Post-MVP |
-| [Self-Testing](./self-testing.md) | Dogfooding: Library tests itself via @example | Low | Not implemented |
+| [Self-Testing](./self-testing.md) | Dogfooding: Library tests itself via @example | Low | In Progress |
 | [Examples Documentation](./examples-documentation.md) | Complete examples with input/output samples | Low | Draft |
 
 ## Legend
