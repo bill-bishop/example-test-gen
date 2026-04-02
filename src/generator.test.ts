@@ -1,6 +1,6 @@
 // Auto-generated test file from @example snippets
 // Source: src/generator.ts
-// Generated: 2026-04-02T03:45:24.900Z
+// Generated: 2026-04-02T03:50:40.944Z
 
 import { generate } from './generator.ts';
 import { builtInConfigs } from './builtins.ts';
@@ -15,7 +15,7 @@ test('SDK01_generateTests_produces_output_file_from_pattern', async () => {
   
   cleanDir('tmp');
   await generate({
-    pattern: 'src/extractor.ts',
+    include: 'src/extractor.ts',
     mapper: builtInConfigs.vitest.mapper,
     outDir: 'tmp'
   });
@@ -28,7 +28,7 @@ test('CORE05_generates_one_test_file_with_multiple_tests_per_source', async () =
   cleanDir('tmp');
   
   await generate({
-    pattern: 'src/cli.ts',
+    include: 'src/cli.ts',
     mapper: builtInConfigs.vitest.mapper,
     outDir: 'tmp'
   });

@@ -15,7 +15,7 @@ import { extractSnippets, findFiles } from './extractor.js';
  *
  * cleanDir('tmp');
  * await generate({
- *   pattern: 'src/extractor.ts',
+ *   include: 'src/extractor.ts',
  *   mapper: builtInConfigs.vitest.mapper,
  *   outDir: 'tmp'
  * });
@@ -33,7 +33,7 @@ import { extractSnippets, findFiles } from './extractor.js';
  * cleanDir('tmp');
  *
  * await generate({
- *   pattern: 'src/cli.ts',
+ *   include: 'src/cli.ts',
  *   mapper: builtInConfigs.vitest.mapper,
  *   outDir: 'tmp'
  * });

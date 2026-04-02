@@ -19,7 +19,7 @@ const extractor_js_1 = require("./extractor.js");
  *
  * cleanDir('tmp');
  * await generate({
- *   pattern: 'src/extractor.ts',
+ *   include: 'src/extractor.ts',
  *   mapper: builtInConfigs.vitest.mapper,
  *   outDir: 'tmp'
  * });
@@ -37,7 +37,7 @@ const extractor_js_1 = require("./extractor.js");
  * cleanDir('tmp');
  *
  * await generate({
- *   pattern: 'src/cli.ts',
+ *   include: 'src/cli.ts',
  *   mapper: builtInConfigs.vitest.mapper,
  *   outDir: 'tmp'
  * });
