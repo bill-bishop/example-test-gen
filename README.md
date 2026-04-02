@@ -34,13 +34,13 @@ The existing code should be updated to meet these requirements where applicable.
 | **SDK03** | **Built-in Mappers Export**: Export `builtInConfigs.jest` and `builtInConfigs.vitest` for SDK consumers | Contract tests via @example in `builtins.ts` | [x] | [ ] | [ ] |
 | **SDK04** | **Config Object Support**: Accept `include` (string[]), `exclude` (string[]), `rootDir` (string), `mapper` (function or built-in name), and `outDir` (string) | Integration tests via @example in `config.ts` | [x] | [ ] | [ ] |
 | **SDK05** | **Config Validation**: Validate required fields (`include`, `mapper` or built-in ref) with helpful error messages | Unit tests via @example in `config.ts` | [x] | [ ] | [ ] |
-| **CORE01** | **Source Discovery**: Find source files matching `include` globs, excluding files matched by `exclude` globs | Unit tests via @example in `extractor.ts` | [x] | [ ] | [ ] |
-| **CORE02** | **@example Extraction**: Extract ALL code snippets from JSDoc `@example` blocks in a file and pass them as a batch to the mapper | Unit tests via @example in `extractor.ts` | [x] | [ ] | [ ] |
-| **CORE03** | **Snippet Parsing**: Parse optional description, code fence language hint, and snippet body | Unit tests via @example in `extractor.ts` | [x] | [ ] | [ ] |
-| **CORE04** | **Import Extraction**: Identify and separate ES module imports from executable code in snippets | Unit tests via @example in `extractor.ts` | [x] | [ ] | [ ] |
-| **CORE05** | **Multiple Snippets**: Detect and extract all @example blocks when multiple are present in a single source file | Unit tests via @example in `extractor.ts` | [x] | [x ] | [ ] |
-| **CORE06** | **rootDir Config**: Strip the `rootDir` prefix from source file paths when computing output structure; user-configurable | Unit tests via @example in `config.ts` | [x] | [ ] | [ ] |
-| **CORE07** | **include / exclude Config**: Accept glob arrays controlling which source files are matched; user-configurable | Unit tests via @example in `config.ts` | [x] | [ ] | [ ] |
+| **CORE01** | **Source Discovery**: Find source files matching `include` globs, excluding files matched by `exclude` globs | Unit tests via @example in `extractor.ts` | [x] | [ ] | [x] |
+| **CORE02** | **@example Extraction**: Extract ALL code snippets from JSDoc `@example` blocks in a file and pass them as a batch to the mapper | Unit tests via @example in `extractor.ts` | [x] | [ ] | [x] |
+| **CORE03** | **Snippet Parsing**: Parse optional description, code fence language hint, and snippet body | Unit tests via @example in `extractor.ts` | [x] | [ ] | [x] |
+| **CORE04** | **Import Extraction**: Identify and separate ES module imports from executable code in snippets | Unit tests via @example in `extractor.ts` | [x] | [ ] | [x] |
+| **CORE05** | **Multiple Snippets**: Detect and extract all @example blocks when multiple are present in a single source file | Unit tests via @example in `extractor.ts` | [x] | [x] | [x] |
+| **CORE06** | **rootDir Config**: Strip the `rootDir` prefix from source file paths when computing output structure; user-configurable | Unit tests via @example in `config.ts` | [x] | [ ] | [x] |
+| **CORE07** | **include / exclude Config**: Accept glob arrays controlling which source files are matched; user-configurable | Unit tests via @example in `config.ts` | [x] | [ ] | [x] |
 | **TRANS01** | **Jest Mapper**: Receive all snippets from a source file, generate ONE test file with multiple `it()` blocks (one per snippet) inside a `describe()` block | Unit tests via @example in `builtins.ts` | [x] | [ ] | [ ] |
 | **TRANS02** | **Vitest Mapper**: Receive all snippets from a source file, generate ONE test file with multiple `test()` blocks (one per snippet) | Unit tests via @example in `builtins.ts` | [x] | [x ] | [ ] |
 | **TRANS03** | **Output Header**: (Both Builtins) Include source file path, description, and auto-generated notice in test file header | Unit tests via @example in `builtins.ts` | [x] | [ ] | [ ] |
