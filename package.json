@@ -12,6 +12,7 @@
     "prepare": "npm run build",
     "remove-test-files": "node scripts/remove-test-files.js",
     "generate": "npx example-test-gen --config=vitest",
+    "docs": "typedoc src/index.ts --out docs/generated",
     "pretest": "npm run remove-test-files && npm run generate",
     "test": "vitest run"
   },
@@ -31,6 +32,7 @@
   "devDependencies": {
     "@types/node": "^20.0.0",
     "jest": "^29.7.0",
+    "typedoc": "^0.28.18",
     "typescript": "^5.3.0",
     "vitest": "^1.0.0"
   },

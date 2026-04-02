@@ -1,6 +1,6 @@
 // Auto-generated test file from @example snippets
 // Source: src/extractor.ts
-// Generated: 2026-04-02T04:27:59.772Z
+// Generated: 2026-04-02T06:31:58.940Z
 
 import { findFiles } from './extractor.ts';
 import { extractSnippets } from './extractor.ts';

@@ -1,6 +1,6 @@
 // Auto-generated test file from @example snippets
 // Source: src/types.ts
-// Generated: 2026-04-02T04:28:01.600Z
+// Generated: 2026-04-02T06:32:01.281Z
 
 import { SnippetInfo } from './types.ts';
 import { MapperResult } from './types.ts';

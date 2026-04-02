@@ -1,6 +1,6 @@
 // Auto-generated test file from @example snippets
 // Source: src/config.ts
-// Generated: 2026-04-02T04:28:01.592Z
+// Generated: 2026-04-02T06:32:01.272Z
 
 import { buildConfigFromFlags } from './config.ts';
 import * as config from './src/config.ts';

@@ -1,6 +1,6 @@
 // Auto-generated test file from @example snippets
 // Source: src/builtins.ts
-// Generated: 2026-04-02T04:28:01.587Z
+// Generated: 2026-04-02T06:32:01.264Z
 
 import { resolveBuiltInConfig } from './builtins.ts';
 import { mkTempDir, writeFile, rmDir } from '../test/helpers/environment.js';
