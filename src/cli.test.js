@@ -1,8 +1,9 @@
 // Auto-generated test file from @example snippets
 // Source: src/cli.ts
-// Generated: 2026-04-02T01:41:59.459Z
+// Generated: 2026-04-02T02:02:16.490Z
 
 import { runCli, readFile } from '../test/helpers/environment.js';
+import { runCli, rm, fileExists } from '../test/helpers/environment.js';
 import { runCli, cleanDir, fileExists } from '../test/helpers/environment.js';
 import { runCli } from '../test/helpers/environment.js';
 import * as cli from './src/cli.ts';
@@ -20,15 +21,15 @@ describe('cli', () => {
   });
 
   it('CLI02_builtin_config_jest_generates_jest_tests', async () => {
-    cleanDir('generated-tests');
+    rm('src/cli.test.js');
     runCli('--config=jest');
-    expect(fileExists('generated-tests/cli.test.js')).toBe(true);
+    expect(fileExists('src/cli.test.js')).toBe(true);
   });
 
   it('CLI02_builtin_config_vitest_generates_vitest_tests', async () => {
-    cleanDir('tests');
+    rm('src/cli.test.ts');
     runCli('--config=vitest');
-    expect(fileExists('tests/cli.test.ts')).toBe(true);
+    expect(fileExists('src/cli.test.ts')).toBe(true);
   });
 
   it('CLI03_custom_config_path_loads_user_defined_config', async () => {

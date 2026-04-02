@@ -13,6 +13,14 @@ export function runCli(args: string): string {
 }
 
 /**
+ * Remove a file if it exists
+ * @param filepath - File path to remove
+ */
+export function rm(filepath: string): void {
+  if (existsSync(filepath)) rmSync(filepath);
+}
+
+/**
  * Remove a directory if it exists
  * @param dir - Directory path to clean
  */

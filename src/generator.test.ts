@@ -1,9 +1,12 @@
-// Generated test from @example snippets
+// Auto-generated test file from @example snippets
 // Source: src/generator.ts
+// Generated: 2026-04-02T02:02:14.993Z
 
 import { generate } from './generator.ts';
 import { builtInConfigs } from './builtins.ts';
-import { cleanDir, fileExists, readFile, listTestFiles } from '../test/helpers/environment.js';
+import { cleanDir, fileExists, readFile } from '../test/helpers/environment.js';
+import { cleanDir, listTestFiles, readFile } from '../test/helpers/environment.js';
+import * as generator from './src/generator.ts';
 
 import { test, expect } from 'vitest';
 

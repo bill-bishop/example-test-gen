@@ -1,9 +1,12 @@
-// Generated test from @example snippets
+// Auto-generated test file from @example snippets
 // Source: src/cli.ts
+// Generated: 2026-04-02T02:02:16.619Z
 
 import { runCli, readFile } from '../test/helpers/environment.js';
+import { runCli, rm, fileExists } from '../test/helpers/environment.js';
 import { runCli, cleanDir, fileExists } from '../test/helpers/environment.js';
 import { runCli } from '../test/helpers/environment.js';
+import * as cli from './src/cli.ts';
 
 import { test, expect } from 'vitest';
 
@@ -19,15 +22,15 @@ test('CLI01_version_flag_shows_package_version', async () => {
 });
 
 test('CLI02_builtin_config_jest_generates_jest_tests', async () => {
-  cleanDir('generated-tests');
+  rm('src/cli.test.js');
   runCli('--config=jest');
-  expect(fileExists('generated-tests/cli.test.js')).toBe(true);
+  expect(fileExists('src/cli.test.js')).toBe(true);
 });
 
 test('CLI02_builtin_config_vitest_generates_vitest_tests', async () => {
-  cleanDir('tests');
+  rm('src/cli.test.ts');
   runCli('--config=vitest');
-  expect(fileExists('tests/cli.test.ts')).toBe(true);
+  expect(fileExists('src/cli.test.ts')).toBe(true);
 });
 
 test('CLI03_custom_config_path_loads_user_defined_config', async () => {
@@ -45,10 +48,17 @@ test('CLI04_invalid_config_path_shows_error', async () => {
   expect(() => runCli('--config=/path/that/does/not/exist.mjs')).toThrow();
 });
 
-test('CLI05_files_flag_overrides_config_pattern', async () => {
+test('CLI05_include_flag_overrides_config_pattern', async () => {
   cleanDir('tests');
-  runCli('--config=vitest --files="src/cli.ts"');
+  runCli('--config=vitest --include="src/cli.ts"');
   expect(fileExists('tests/cli.test.ts')).toBe(true);
+});
+
+test('CLI05_exclude_flag_filters_out_files', async () => {
+  cleanDir('tests');
+  runCli('--config=vitest --include="src/*.ts" --exclude="**\/cli.ts"');
+  expect(fileExists('tests/cli.test.ts')).toBe(false);
+  expect(fileExists('tests/builtins.test.ts')).toBe(true);
 });
 
 test('CLI06_outDir_flag_overrides_default_output_directory', async () => {

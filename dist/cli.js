@@ -43,18 +43,18 @@ async function loadConfigAndValidate(configPath, cwd) {
  *
  * @example CLI02_builtin_config_jest_generates_jest_tests
  * ```ts
- * import { runCli, cleanDir, fileExists } from '../test/helpers/environment.js';
- * cleanDir('generated-tests');
+ * import { runCli, rm, fileExists } from '../test/helpers/environment.js';
+ * rm('src/cli.test.js');
  * runCli('--config=jest');
- * expect(fileExists('generated-tests/cli.test.js')).toBe(true);
+ * expect(fileExists('src/cli.test.js')).toBe(true);
  * ```
  *
  * @example CLI02_builtin_config_vitest_generates_vitest_tests
  * ```ts
- * import { runCli, cleanDir, fileExists } from '../test/helpers/environment.js';
- * cleanDir('tests');
+ * import { runCli, rm, fileExists } from '../test/helpers/environment.js';
+ * rm('src/cli.test.ts');
  * runCli('--config=vitest');
- * expect(fileExists('tests/cli.test.ts')).toBe(true);
+ * expect(fileExists('src/cli.test.ts')).toBe(true);
  * ```
  *
  * @example CLI03_custom_config_path_loads_user_defined_config

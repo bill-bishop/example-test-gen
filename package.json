@@ -10,7 +10,7 @@
   "scripts": {
     "build": "tsc",
     "prepare": "npm run build",
-    "pretest": "npx example-test-gen --config=vitest",
+    "pretest": "node -e \"require('fs').readdirSync('src').filter(f=>f.endsWith('.test.js')||f.endsWith('.test.ts')).forEach(f=>require('fs').rmSync('src/'+f))\" && npx example-test-gen --config=vitest",
     "test": "vitest run"
   },
   "keywords": [
