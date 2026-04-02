@@ -10,6 +10,21 @@ exports.createVitestMapper = createVitestMapper;
 exports.loadBuiltInMapper = loadBuiltInMapper;
 const fs_1 = require("fs");
 const path_1 = __importDefault(require("path"));
+/**
+ * @example reads_tsconfig_correctly
+ * ```ts
+ * import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'fs';
+ * import { tmpdir } from 'os';
+ * import { join } from 'path';
+ * const tmpDir = tmpdir();
+ * const testDir = join(tmpDir, 'test-' + Date.now());
+ * mkdirSync(testDir, { recursive: true });
+ * writeFileSync(join(testDir, 'tsconfig.json'), JSON.stringify({ compilerOptions: { rootDir: './src' } }));
+ * const result = await readTsConfig(testDir);
+ * expect(result?.compilerOptions?.rootDir).toBe('./src');
+ * rmSync(testDir, { recursive: true });
+ * ```
+ */
 async function readTsConfig(cwd) {
     try {
         const tsconfigPath = path_1.default.join(cwd, 'tsconfig.json');

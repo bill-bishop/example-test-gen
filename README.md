@@ -4,6 +4,10 @@ Generate test files from `@example` snippets in your code.
 
 [ UNDER CONSTRUCTION ] 2026-03-31 - This package is still being built! Tune in later!
 
+## TODO
+
+- **TRANS04**: Import deduplication is partially implemented but not working correctly - generated test files contain duplicate import statements from the same module (e.g., `cli.test.ts` has 4 separate imports from `../test/helpers/environment.js` that should be consolidated into one).
+
 ## Contents
 
 - [Overview](#overview)
