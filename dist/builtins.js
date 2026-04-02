@@ -13,16 +13,14 @@ const path_1 = __importDefault(require("path"));
 /**
  * @example reads_tsconfig_correctly
  * ```ts
- * import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'fs';
- * import { tmpdir } from 'os';
- * import { join } from 'path';
- * const tmpDir = tmpdir();
- * const testDir = join(tmpDir, 'test-' + Date.now());
- * mkdirSync(testDir, { recursive: true });
- * writeFileSync(join(testDir, 'tsconfig.json'), JSON.stringify({ compilerOptions: { rootDir: './src' } }));
- * const result = await readTsConfig(testDir);
- * expect(result?.compilerOptions?.rootDir).toBe('./src');
- * rmSync(testDir, { recursive: true });
+ * import { resolveBuiltInConfig } from './builtins.ts';
+ * import { mkTempDir, writeFile, rmDir } from '../test/helpers/environment.js';
+ *
+ * const testDir = mkTempDir('tsconfig-test');
+ * writeFile(`${testDir}/tsconfig.json`, JSON.stringify({ compilerOptions: { rootDir: './lib' } }));
+ * const config = await resolveBuiltInConfig('vitest', testDir);
+ * expect(config.rootDir).toBe('./lib');
+ * rmDir(testDir);
  * ```
  */
 async function readTsConfig(cwd) {
@@ -109,7 +107,17 @@ function createVitestMapper() {
 /**
  * Loads a built-in mapper by name
  * @example SDK03_loads_jest_builtin_mapper
+ * ```ts
+ * import { loadBuiltInMapper } from './builtins.ts';
+ * const mapper = await loadBuiltInMapper('jest', '.');
+ * expect(typeof mapper).toBe('function');
+ * ```
  * @example SDK03_loads_vitest_builtin_mapper
+ * ```ts
+ * import { loadBuiltInMapper } from './builtins.ts';
+ * const mapper = await loadBuiltInMapper('vitest', '.');
+ * expect(typeof mapper).toBe('function');
+ * ```
  */
 async function loadBuiltInMapper(name, cwd) {
     const config = await resolveBuiltInConfig(name, cwd);
@@ -118,6 +126,15 @@ async function loadBuiltInMapper(name, cwd) {
 /**
  * Built-in configurations for SDK consumers
  * @example SDK03_exports_builtInConfigs_with_jest_and_vitest
+ * ```ts
+ * import { builtInConfigs } from './builtins.ts';
+ * expect(builtInConfigs.jest).toBeDefined();
+ * expect(builtInConfigs.vitest).toBeDefined();
+ * expect(builtInConfigs.jest.name).toBe('jest');
+ * expect(builtInConfigs.vitest.name).toBe('vitest');
+ * expect(typeof builtInConfigs.jest.mapper).toBe('function');
+ * expect(typeof builtInConfigs.vitest.mapper).toBe('function');
+ * ```
  */
 exports.builtInConfigs = {
     jest: { mapper: createJestMapper(), name: 'jest' },
