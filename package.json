@@ -10,7 +10,9 @@
   "scripts": {
     "build": "tsc",
     "prepare": "npm run build",
-    "pretest": "node scripts/remove-test-files.js && npx example-test-gen --config=vitest",
+    "remove-test-files": "node scripts/remove-test-files.js",
+    "generate": "npx example-test-gen --config=vitest",
+    "pretest": "npm run remove-test-files && npm run generate",
     "test": "vitest run"
   },
   "keywords": [
