@@ -1,6 +1,6 @@
 // Auto-generated test file from @example snippets
 // Source: src/builtins.ts
-// Generated: 2026-04-02T04:20:59.380Z
+// Generated: 2026-04-02T04:28:01.587Z
 
 import { resolveBuiltInConfig } from './builtins.ts';
 import { mkTempDir, writeFile, rmDir } from '../test/helpers/environment.js';
@@ -22,11 +22,11 @@ describe('builtins', () => {
     const testDir = mkTempDir('jest-defaults-test');
     writeFile(`${testDir}/tsconfig.json`, JSON.stringify({
       compilerOptions: { rootDir: './source' },
-      include: ['source/**\\/*']
+      include: ['source/**' + '/*']
     }));
     const config = await resolveBuiltInConfig('jest', testDir);
     expect(config.rootDir).toBe('./source');
-    expect(config.include).toContain('source/**\/*');
+    expect(config.include).toContain('source/**' + '/*');
     rmDir(testDir);
   });
 
@@ -80,13 +80,13 @@ describe('builtins', () => {
     const testDir = mkTempDir('vitest-defaults-test');
     writeFile(`${testDir}/tsconfig.json`, JSON.stringify({
       compilerOptions: { rootDir: './lib' },
-      include: ['lib/**\\/*'],
-      exclude: ['**\\/*.test.ts']
+      include: ['lib/**' + '/*'],
+      exclude: ['**' + '/*.test.ts']
     }));
     const config = await resolveBuiltInConfig('vitest', testDir);
     expect(config.rootDir).toBe('./lib');
-    expect(config.include).toContain('lib/**\/*');
-    expect(config.exclude).toContain('**\/*.test.ts');
+    expect(config.include).toContain('lib/**' + '/*');
+    expect(config.exclude).toContain('**' + '/*.test.ts');
     rmDir(testDir);
   });
 

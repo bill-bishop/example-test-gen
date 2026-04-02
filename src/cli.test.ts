@@ -1,6 +1,6 @@
 // Auto-generated test file from @example snippets
 // Source: src/cli.ts
-// Generated: 2026-04-02T04:20:59.545Z
+// Generated: 2026-04-02T04:28:01.764Z
 
 import { runCli } from '../test/helpers/environment.js';
 import { runCli, readFile } from '../test/helpers/environment.js';

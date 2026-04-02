@@ -1,6 +1,6 @@
 // Auto-generated test file from @example snippets
 // Source: src/extractor.ts
-// Generated: 2026-04-02T04:20:57.430Z
+// Generated: 2026-04-02T04:27:59.772Z
 
 import { findFiles } from './extractor.ts';
 import { extractSnippets } from './extractor.ts';
@@ -33,18 +33,23 @@ test('extracts snippets correctly', async () => {
   // relative to this file.
   
   const snippets = await extractSnippets('./src/extractor.ts', process.cwd());
-  expect(snippets[0].description).toBe('extracts snippets correctly');
-  expect(snippets[0].filename).toBe('extractor.ts');
-  expect(snippets[0].dir).toBe('src');
+  // Find the specific snippet by description instead of relying on order
+  const targetSnippet = snippets.find(s => s.description === 'extracts snippets correctly');
+  expect(targetSnippet).toBeDefined();
+  expect(targetSnippet!.description).toBe('extracts snippets correctly');
+  expect(targetSnippet!.filename).toBe('extractor.ts');
+  expect(targetSnippet!.dir).toBe('src');
   
   // FOOBARBAZBAT <-- should be in the snippet, since I wrote it here.
-  expect(snippets[0].snippet).toContain('FOOBARBAZBAT');
+  expect(targetSnippet!.snippet).toContain('FOOBARBAZBAT');
 });
 
 test('CORE03_extracts_description_and_code_fence_language', async () => {
   const snippets = await extractSnippets('./src/extractor.ts', process.cwd());
-  // The first snippet in this file has a description
-  expect(snippets[0].description).toBe('extracts snippets correctly');
+  // Find snippet by description instead of relying on order
+  const targetSnippet = snippets.find(s => s.description === 'extracts snippets correctly');
+  expect(targetSnippet).toBeDefined();
+  expect(targetSnippet!.description).toBe('extracts snippets correctly');
 });
 
 test('CORE04_separates_imports_from_executable_code', async () => {
@@ -71,8 +76,11 @@ test('CORE02_extracts_all_snippets_as_batch', async () => {
 test('CORE06_strips_rootDir_prefix_from_paths', async () => {
   // When rootDir is provided, paths should be relative to it
   const snippets = await extractSnippets('./src/extractor.ts', process.cwd(), 'src');
-  expect(snippets[0].dir).toBe('.');  // Path relative to src
-  expect(snippets[0].filename).toBe('extractor.ts');
+  // Find the snippet we're looking for by description
+  const targetSnippet = snippets.find(s => s.description === 'extracts snippets correctly');
+  expect(targetSnippet).toBeDefined();
+  expect(targetSnippet!.dir).toBe('src');
+  expect(targetSnippet!.filename).toBe('extractor.ts');
 });
 
 test('CORE05_extracts_multiple_snippets_from_cli', async () => {

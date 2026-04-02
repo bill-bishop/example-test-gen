@@ -31,11 +31,11 @@ const path_1 = __importDefault(require("path"));
  * const testDir = mkTempDir('jest-defaults-test');
  * writeFile(`${testDir}/tsconfig.json`, JSON.stringify({
  *   compilerOptions: { rootDir: './source' },
- *   include: ['source/**\\/*']
+ *   include: ['source/**' + '/*']
  * }));
  * const config = await resolveBuiltInConfig('jest', testDir);
  * expect(config.rootDir).toBe('./source');
- * expect(config.include).toContain('source/**\/*');
+ * expect(config.include).toContain('source/**' + '/*');
  * rmDir(testDir);
  * ```
  */
@@ -150,13 +150,13 @@ function createVitestMapper() {
      * const testDir = mkTempDir('vitest-defaults-test');
      * writeFile(`${testDir}/tsconfig.json`, JSON.stringify({
      *   compilerOptions: { rootDir: './lib' },
-     *   include: ['lib/**\\/*'],
-     *   exclude: ['**\\/*.test.ts']
+     *   include: ['lib/**' + '/*'],
+     *   exclude: ['**' + '/*.test.ts']
      * }));
      * const config = await resolveBuiltInConfig('vitest', testDir);
      * expect(config.rootDir).toBe('./lib');
-     * expect(config.include).toContain('lib/**\/*');
-     * expect(config.exclude).toContain('**\/*.test.ts');
+     * expect(config.include).toContain('lib/**' + '/*');
+     * expect(config.exclude).toContain('**' + '/*.test.ts');
      * rmDir(testDir);
      * ```
      */

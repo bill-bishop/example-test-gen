@@ -1,6 +1,6 @@
 // Auto-generated test file from @example snippets
 // Source: src/outputs.ts
-// Generated: 2026-04-02T04:20:57.435Z
+// Generated: 2026-04-02T04:27:59.775Z
 
 import { readOutputFile } from './outputs.ts';
 import { mkTempDir, rmDir } from '../test/helpers/environment.js';
