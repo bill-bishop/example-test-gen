@@ -1,6 +1,6 @@
 // Auto-generated test file from @example snippets
 // Source: src/generator.ts
-// Generated: 2026-04-02T03:44:27.860Z
+// Generated: 2026-04-02T03:45:24.900Z
 
 import { generate } from './generator.ts';
 import { builtInConfigs } from './builtins.ts';
