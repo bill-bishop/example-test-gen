@@ -1,5 +1,7 @@
 import { execSync } from 'child_process';
-import { existsSync, rmSync, readFileSync, readdirSync } from 'fs';
+import { existsSync, rmSync, readFileSync, readdirSync, writeFileSync, mkdirSync } from 'fs';
+import { tmpdir } from 'os';
+import { join } from 'path';
 
 const CLI_PATH = 'dist/cli.js';
 
@@ -44,6 +46,34 @@ export function fileExists(filepath: string): boolean {
  */
 export function readFile(filepath: string): string {
   return readFileSync(filepath, 'utf-8');
+}
+
+/**
+ * Write a file with given content
+ * @param filepath - Path to write
+ * @param content - Content to write
+ */
+export function writeFile(filepath: string, content: string): void {
+  writeFileSync(filepath, content, 'utf-8');
+}
+
+/**
+ * Create a temporary directory
+ * @param prefix - Prefix for the directory name
+ * @returns Path to the created directory
+ */
+export function mkTempDir(prefix: string): string {
+  const dir = join(tmpdir(), `${prefix}-${Date.now()}`);
+  mkdirSync(dir, { recursive: true });
+  return dir;
+}
+
+/**
+ * Remove a directory recursively
+ * @param dir - Directory path to remove
+ */
+export function rmDir(dir: string): void {
+  if (existsSync(dir)) rmSync(dir, { recursive: true });
 }
 
 /**
