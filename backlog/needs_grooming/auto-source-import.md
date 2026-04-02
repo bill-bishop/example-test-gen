@@ -16,7 +16,7 @@ Generated test files automatically detect & import all *used* exports from the s
 
 ## Notes
 
-Decision needed on whether this happens before, during, or after mapping. Currently marked as implemented but existing implementation just imports * as the source file name.
+Decision needed on whether this happens before, during, or after mapping. Not yet implemented - existing equivalent just imports * as the source file name.
 
 ### Example
 
