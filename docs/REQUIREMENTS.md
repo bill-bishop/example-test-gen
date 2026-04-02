@@ -1,26 +1,4 @@
-# example-test-gen
-
-Generate test files from `@example` snippets in your code.
-
-[ UNDER CONSTRUCTION ] 2026-03-31 - This package is still being built! Tune in later!
-
-## Contents
-
-- [Overview](#overview)
-- [Requirements](#requirements)
-
-## Overview
-
-`example-test-gen` extracts test code from JSDoc `@example` annotations and generates runnable test files.
-
 ## Requirements
-
-These requirements have been rewritten and defined since the core code was initially created.
-When implementing new features or modifying existing ones, please refer to these requirements to ensure compliance.
-
-The existing code should be updated to meet these requirements where applicable.
-
-> **Note**: See [`../backlog/_INDEX.md`](../backlog/_INDEX.md) for backlog items including TODOs, Post-MVP features, and deferred work.
 
 | ID | Requirement (plain language) | Test Pattern(s) | User Reviewed | Tests Completed | Implemented |
 |----|------------------------------|-----------------|---------------|-----------|-------------|
