@@ -4,8 +4,6 @@ The following validation errors were found in your configuration:
 
 [31m{{errors}}[0m
 
-═══════════════════════════════════════════════════════════════════════════════
-
 [1;36m📋 SAMPLE CONFIGURATION[0m
 
 Here's a working example to get you started:
@@ -15,8 +13,6 @@ Here's a working example to get you started:
   [36mexclude[0m: [33m['src/**/*.test.ts'][0m,
   [36mmapper[0m: [33m'vitest'[0m  [90m// or 'jest' for Jest-style tests[0m
 [33m};[0m
-
-═══════════════════════════════════════════════════════════════════════════════
 
 [1;33m💡 For more complex setups, you can use a custom mapper function:[0m
 
@@ -31,7 +27,5 @@ Here's a working example to get you started:
     };
   [33m}[0m
 [33m};[0m
-
-═══════════════════════════════════════════════════════════════════════════════
 
 Need help? Run: [33mnpx example-test-gen --help[0m

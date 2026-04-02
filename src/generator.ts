@@ -53,9 +53,9 @@ import { extractSnippets, findFiles } from './extractor.js';
  * cleanDir('tmp');
  * ```
  */
-export async function generate(options: GenerateOptions): Promise<number> {
+export async function generate(options: GenerateOptions): Promise<string[]> {
   const { include, exclude, mapper, cwd = process.cwd(), outDir, rootDir, overwrite } = options;
-  let fileCount = 0;
+  const generatedFiles: string[] = [];
   
   for await (const filePath of findFiles(include, exclude, cwd)) {
     const snippets = await extractSnippets(filePath, cwd, rootDir);
@@ -89,8 +89,8 @@ export async function generate(options: GenerateOptions): Promise<number> {
     }
     
     await fs.writeFile(absoluteOutputPath, output, 'utf-8');
-    fileCount++;
+    generatedFiles.push(finalRelativePath);
   }
   
-  return fileCount;
+  return generatedFiles;
 }

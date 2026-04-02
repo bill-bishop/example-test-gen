@@ -116,7 +116,7 @@ async function main() {
     const cwd = process.cwd();
     // Handle help and version flags
     if (args.includes('--help')) {
-        await (0, outputs_js_1.printOutput)('help.txt', { theme: 'info' }, cwd);
+        await (0, outputs_js_1.printOutput)('help.txt', undefined, cwd);
         process.exit(0);
     }
     if (args.includes('--version')) {
@@ -145,9 +145,7 @@ async function main() {
         // Validate final config (SDK05: Config Validation)
         const validation = await (0, config_js_1.validateConfigAsync)(finalConfig, cwd);
         if (!validation.valid) {
-            await (0, outputs_js_1.printErrorAndExit)('config-error.txt', {
-                variables: { errors: (0, outputs_js_1.formatErrorList)(validation.errors) }
-            }, 1, cwd);
+            await (0, outputs_js_1.printErrorAndExit)('config-error.txt', { errors: (0, outputs_js_1.formatErrorList)(validation.errors) }, 1, cwd);
         }
         // Resolve mapper if it's a builtin name
         let mapper;
@@ -157,7 +155,7 @@ async function main() {
         else {
             mapper = builtins_js_1.builtInConfigs[finalConfig.mapper].mapper;
         }
-        const fileCount = await (0, generator_js_1.generate)({
+        const generatedFiles = await (0, generator_js_1.generate)({
             include: finalConfig.include,
             exclude: finalConfig.exclude,
             mapper,
@@ -166,19 +164,16 @@ async function main() {
             overwrite: finalConfig.overwrite,
             cwd
         });
+        const fileList = generatedFiles.map(f => `  \u001b[33m•\u001b[0m ${f}`).join('\n') || '  \u001b[90m(no new files generated)\u001b[0m';
         await (0, outputs_js_1.printOutput)('success.txt', {
-            variables: {
-                fileCount: String(fileCount),
-                outDir: finalConfig.outDir ?? 'same directory as source files',
-                mapper: typeof finalConfig.mapper === 'function' ? 'custom function' : finalConfig.mapper
-            },
-            theme: 'success'
+            fileCount: String(generatedFiles.length),
+            fileList: fileList,
+            outDir: finalConfig.outDir ?? 'same directory as source files',
+            mapper: typeof finalConfig.mapper === 'function' ? 'custom function' : finalConfig.mapper
         }, cwd);
     }
     catch (err) {
-        await (0, outputs_js_1.printErrorAndExit)('general-error.txt', {
-            variables: { message: err.message }
-        }, 1, cwd);
+        await (0, outputs_js_1.printErrorAndExit)('general-error.txt', { message: err.message }, 1, cwd);
     }
 }
 main();

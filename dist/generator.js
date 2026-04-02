@@ -59,7 +59,7 @@ const extractor_js_1 = require("./extractor.js");
  */
 async function generate(options) {
     const { include, exclude, mapper, cwd = process.cwd(), outDir, rootDir, overwrite } = options;
-    let fileCount = 0;
+    const generatedFiles = [];
     for await (const filePath of (0, extractor_js_1.findFiles)(include, exclude, cwd)) {
         const snippets = await (0, extractor_js_1.extractSnippets)(filePath, cwd, rootDir);
         if (snippets.length === 0)
@@ -86,8 +86,8 @@ async function generate(options) {
             }
         }
         await fs_1.promises.writeFile(absoluteOutputPath, output, 'utf-8');
-        fileCount++;
+        generatedFiles.push(finalRelativePath);
     }
-    return fileCount;
+    return generatedFiles;
 }
 //# sourceMappingURL=generator.js.map

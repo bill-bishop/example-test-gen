@@ -1,10 +1,7 @@
-[1;32m✨ Test Generation Complete ✨[0m
-
-Your test files have been generated successfully!
-
 [36mGenerated:[0m [33m{{fileCount}}[0m test file(s)
+
+[36mFiles created:[0m
+{{fileList}}
+
 [36mOutput directory:[0m [33m{{outDir}}[0m
 [36mMapper used:[0m [33m{{mapper}}[0m
-
-All examples found in your source files have been converted to test cases.
-Happy testing! 🧪

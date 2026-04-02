@@ -14,7 +14,7 @@ export { createJestMapper, createVitestMapper, builtInConfigs, loadBuiltInMapper
  * Generate tests from @example snippets
  * @example SDK01_generateTests_accepts_config_object
  */
-export async function generateTests(config: Config): Promise<number> {
+export async function generateTests(config: Config): Promise<string[]> {
   // Validate config
   const validation = await validateConfigAsync(config);
   if (!validation.valid) {

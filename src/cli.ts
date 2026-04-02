@@ -117,7 +117,7 @@ async function main() {
   
   // Handle help and version flags
   if (args.includes('--help')) {
-    await printOutput('help.txt', { theme: 'info' }, cwd);
+    await printOutput('help.txt', undefined, cwd);
     process.exit(0);
   }
   
@@ -159,9 +159,7 @@ async function main() {
     // Validate final config (SDK05: Config Validation)
     const validation = await validateConfigAsync(finalConfig, cwd);
     if (!validation.valid) {
-      await printErrorAndExit('config-error.txt', {
-        variables: { errors: formatErrorList(validation.errors) }
-      }, 1, cwd);
+      await printErrorAndExit('config-error.txt', { errors: formatErrorList(validation.errors) }, 1, cwd);
     }
     
     // Resolve mapper if it's a builtin name
@@ -172,7 +170,7 @@ async function main() {
       mapper = builtInConfigs[finalConfig.mapper].mapper;
     }
     
-    const fileCount = await generate({
+    const generatedFiles = await generate({
       include: finalConfig.include,
       exclude: finalConfig.exclude,
       mapper,
@@ -182,18 +180,16 @@ async function main() {
       cwd
     });
     
+    const fileList = generatedFiles.map(f => `  \u001b[33m•\u001b[0m ${f}`).join('\n') || '  \u001b[90m(no new files generated)\u001b[0m';
+    
     await printOutput('success.txt', {
-      variables: {
-        fileCount: String(fileCount),
-        outDir: finalConfig.outDir ?? 'same directory as source files',
-        mapper: typeof finalConfig.mapper === 'function' ? 'custom function' : finalConfig.mapper
-      },
-      theme: 'success'
+      fileCount: String(generatedFiles.length),
+      fileList: fileList,
+      outDir: finalConfig.outDir ?? 'same directory as source files',
+      mapper: typeof finalConfig.mapper === 'function' ? 'custom function' : finalConfig.mapper
     }, cwd);
   } catch (err) {
-    await printErrorAndExit('general-error.txt', {
-      variables: { message: (err as Error).message }
-    }, 1, cwd);
+    await printErrorAndExit('general-error.txt', { message: (err as Error).message }, 1, cwd);
   }
 }
 

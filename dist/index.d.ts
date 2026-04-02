@@ -7,5 +7,5 @@ export { createJestMapper, createVitestMapper, builtInConfigs, loadBuiltInMapper
  * Generate tests from @example snippets
  * @example SDK01_generateTests_accepts_config_object
  */
-export declare function generateTests(config: Config): Promise<number>;
+export declare function generateTests(config: Config): Promise<string[]>;
 //# sourceMappingURL=index.d.ts.map
