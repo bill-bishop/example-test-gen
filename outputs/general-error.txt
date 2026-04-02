@@ -1,0 +1,11 @@
+[1;31m💥 Error[0m
+
+[31m{{message}}[0m
+
+Something went wrong while generating tests.
+Please check:
+  [33m•[0m The config file path is correct
+  [33m•[0m Source files exist at the specified patterns
+  [33m•[0m Output directory is writable
+
+Run with [33m--help[0m for usage information.

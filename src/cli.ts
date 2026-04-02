@@ -6,6 +6,7 @@ import { generate } from './generator.js';
 import { MapperFunction } from './types.js';
 import { builtInConfigs } from './builtins.js';
 import { Config, validateConfigAsync, buildConfigFromFlags, loadConfig } from './config.js';
+import { readOutputFile, printOutput, printErrorAndExit, formatErrorList } from './outputs.js';
 
 async function loadConfigAndValidate(configPath: string, cwd: string): Promise<Config> {
   // Check for built-in configs first
@@ -28,9 +29,11 @@ async function loadConfigAndValidate(configPath: string, cwd: string): Promise<C
  *
  * @example CLI01_help_flag_shows_usage_info
  * ```ts
- * import { runCli, readFile } from '../test/helpers/environment.js';
+ * import { runCli } from '../test/helpers/environment.js';
  * const output = runCli('--help');
- * expect(output).toContain(readFile('outputs/help.txt'));
+ * expect(output).toContain('example-test-gen');
+ * expect(output).toContain('--config');
+ * expect(output).toContain('--help');
  * ```
  *
  * @example CLI01_version_flag_shows_package_version
@@ -114,9 +117,7 @@ async function main() {
   
   // Handle help and version flags
   if (args.includes('--help')) {
-    const helpPath = path.resolve(cwd, 'outputs/help.txt');
-    const helpText = await fs.readFile(helpPath, 'utf-8');
-    console.log(helpText);
+    await printOutput('help.txt', { theme: 'info' }, cwd);
     process.exit(0);
   }
   
@@ -158,9 +159,9 @@ async function main() {
     // Validate final config (SDK05: Config Validation)
     const validation = await validateConfigAsync(finalConfig, cwd);
     if (!validation.valid) {
-      console.error('Config validation failed:');
-      validation.errors.forEach(err => console.error(`  - ${err}`));
-      process.exit(1);
+      await printErrorAndExit('config-error.txt', {
+        variables: { errors: formatErrorList(validation.errors) }
+      }, 1, cwd);
     }
     
     // Resolve mapper if it's a builtin name
@@ -171,7 +172,7 @@ async function main() {
       mapper = builtInConfigs[finalConfig.mapper].mapper;
     }
     
-    await generate({
+    const fileCount = await generate({
       include: finalConfig.include,
       exclude: finalConfig.exclude,
       mapper,
@@ -180,10 +181,19 @@ async function main() {
       overwrite: finalConfig.overwrite,
       cwd
     });
-    console.log('Test files generated successfully');
+    
+    await printOutput('success.txt', {
+      variables: {
+        fileCount: String(fileCount),
+        outDir: finalConfig.outDir ?? 'same directory as source files',
+        mapper: typeof finalConfig.mapper === 'function' ? 'custom function' : finalConfig.mapper
+      },
+      theme: 'success'
+    }, cwd);
   } catch (err) {
-    console.error('Error:', (err as Error).message);
-    process.exit(1);
+    await printErrorAndExit('general-error.txt', {
+      variables: { message: (err as Error).message }
+    }, 1, cwd);
   }
 }
 

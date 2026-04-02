@@ -1,0 +1,37 @@
+[1;31m❌ Configuration Error[0m
+
+The following validation errors were found in your configuration:
+
+[31m{{errors}}[0m
+
+═══════════════════════════════════════════════════════════════════════════════
+
+[1;36m📋 SAMPLE CONFIGURATION[0m
+
+Here's a working example to get you started:
+
+[33mexport default {[0m
+  [36minclude[0m: [33m['src/**/*.ts'][0m,
+  [36mexclude[0m: [33m['src/**/*.test.ts'][0m,
+  [36mmapper[0m: [33m'vitest'[0m  [90m// or 'jest' for Jest-style tests[0m
+[33m};[0m
+
+═══════════════════════════════════════════════════════════════════════════════
+
+[1;33m💡 For more complex setups, you can use a custom mapper function:[0m
+
+[33mexport default {[0m
+  [36minclude[0m: [33m['src/**/*.ts'][0m,
+  [36mmapper[0m: [33m(snippets) => {[0m
+    [36mconst[0m { [36mfilename[0m } = [33msnippets[0m[[33m0[0m];
+    [36mconst[0m [36mname[0m = [33mfilename[0m.[36mreplace[0m([33m/\.(ts|js|tsx|jsx|mjs|cjs)$/[0m, [33m''[0m);
+    [36mreturn[0m {
+      [36moutput[0m: [33m`// Custom test for ${filename}`[0m,
+      [36mfilepath[0m: [33m`custom-output/${name}.test.js`[0m
+    };
+  [33m}[0m
+[33m};[0m
+
+═══════════════════════════════════════════════════════════════════════════════
+
+Need help? Run: [33mnpx example-test-gen --help[0m

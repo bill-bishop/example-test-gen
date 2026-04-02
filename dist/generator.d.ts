@@ -49,5 +49,5 @@ import { GenerateOptions } from './types.js';
  * cleanDir('tmp');
  * ```
  */
-export declare function generate(options: GenerateOptions): Promise<void>;
+export declare function generate(options: GenerateOptions): Promise<number>;
 //# sourceMappingURL=generator.d.ts.map

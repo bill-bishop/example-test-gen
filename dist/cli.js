@@ -9,6 +9,7 @@ const path_1 = __importDefault(require("path"));
 const generator_js_1 = require("./generator.js");
 const builtins_js_1 = require("./builtins.js");
 const config_js_1 = require("./config.js");
+const outputs_js_1 = require("./outputs.js");
 async function loadConfigAndValidate(configPath, cwd) {
     // Check for built-in configs first
     if (configPath === 'jest' || configPath === 'vitest') {
@@ -28,9 +29,11 @@ async function loadConfigAndValidate(configPath, cwd) {
  *
  * @example CLI01_help_flag_shows_usage_info
  * ```ts
- * import { runCli, readFile } from '../test/helpers/environment.js';
+ * import { runCli } from '../test/helpers/environment.js';
  * const output = runCli('--help');
- * expect(output).toContain(readFile('outputs/help.txt'));
+ * expect(output).toContain('example-test-gen');
+ * expect(output).toContain('--config');
+ * expect(output).toContain('--help');
  * ```
  *
  * @example CLI01_version_flag_shows_package_version
@@ -113,9 +116,7 @@ async function main() {
     const cwd = process.cwd();
     // Handle help and version flags
     if (args.includes('--help')) {
-        const helpPath = path_1.default.resolve(cwd, 'outputs/help.txt');
-        const helpText = await fs_1.promises.readFile(helpPath, 'utf-8');
-        console.log(helpText);
+        await (0, outputs_js_1.printOutput)('help.txt', { theme: 'info' }, cwd);
         process.exit(0);
     }
     if (args.includes('--version')) {
@@ -144,9 +145,9 @@ async function main() {
         // Validate final config (SDK05: Config Validation)
         const validation = await (0, config_js_1.validateConfigAsync)(finalConfig, cwd);
         if (!validation.valid) {
-            console.error('Config validation failed:');
-            validation.errors.forEach(err => console.error(`  - ${err}`));
-            process.exit(1);
+            await (0, outputs_js_1.printErrorAndExit)('config-error.txt', {
+                variables: { errors: (0, outputs_js_1.formatErrorList)(validation.errors) }
+            }, 1, cwd);
         }
         // Resolve mapper if it's a builtin name
         let mapper;
@@ -156,7 +157,7 @@ async function main() {
         else {
             mapper = builtins_js_1.builtInConfigs[finalConfig.mapper].mapper;
         }
-        await (0, generator_js_1.generate)({
+        const fileCount = await (0, generator_js_1.generate)({
             include: finalConfig.include,
             exclude: finalConfig.exclude,
             mapper,
@@ -165,11 +166,19 @@ async function main() {
             overwrite: finalConfig.overwrite,
             cwd
         });
-        console.log('Test files generated successfully');
+        await (0, outputs_js_1.printOutput)('success.txt', {
+            variables: {
+                fileCount: String(fileCount),
+                outDir: finalConfig.outDir ?? 'same directory as source files',
+                mapper: typeof finalConfig.mapper === 'function' ? 'custom function' : finalConfig.mapper
+            },
+            theme: 'success'
+        }, cwd);
     }
     catch (err) {
-        console.error('Error:', err.message);
-        process.exit(1);
+        await (0, outputs_js_1.printErrorAndExit)('general-error.txt', {
+            variables: { message: err.message }
+        }, 1, cwd);
     }
 }
 main();
