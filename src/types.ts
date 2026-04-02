@@ -25,7 +25,22 @@ export interface GenerateOptions {
   outDir?: string;
   /** Root directory for finding source files */
   rootDir?: string;
+  /** Overwrite existing test files without prompting */
+  overwrite?: boolean;
 }
 
 /** @deprecated Use GenerateOptions instead - maintained for backwards compatibility */
-export type Config = GenerateOptions;
+export interface Config {
+  /** File patterns to include */
+  include: string[];
+  /** File patterns to exclude */
+  exclude?: string[];
+  /** Root directory for finding source files (default: './src') */
+  rootDir?: string;
+  /** Mapper function or built-in name ('jest' | 'vitest') */
+  mapper: MapperFn | 'jest' | 'vitest';
+  /** Output directory for generated tests */
+  outDir?: string;
+  /** Overwrite existing test files without prompting */
+  overwrite?: boolean;
+}

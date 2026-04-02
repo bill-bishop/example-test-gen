@@ -18,6 +18,8 @@ export interface Config {
   mapper: MapperFn | 'jest' | 'vitest';
   /** Output directory for generated tests */
   outDir?: string;
+  /** Overwrite existing test files without prompting */
+  overwrite?: boolean;
 }
 
 /**
@@ -179,6 +181,7 @@ export function buildConfigFromFlags(
     exclude?: string;
     outDir?: string;
     rootDir?: string;
+    overwrite?: boolean;
   },
   baseConfig: Partial<Config>
 ): Config {
@@ -187,6 +190,7 @@ export function buildConfigFromFlags(
     exclude: flags.exclude ? [flags.exclude] : baseConfig.exclude,
     outDir: flags.outDir ?? baseConfig.outDir,
     rootDir: flags.rootDir ?? baseConfig.rootDir,
+    overwrite: flags.overwrite ?? baseConfig.overwrite,
     mapper: baseConfig.mapper ?? 'vitest'
   };
 }

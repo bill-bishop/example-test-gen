@@ -117,6 +117,7 @@ async function main() {
     console.log('  --exclude=<pattern>    File pattern(s) to exclude (overrides config)');
     console.log('  --outDir=<dir>         Output directory for generated tests');
     console.log('  --root-dir=<dir>       Root directory for finding source files');
+    console.log('  --overwrite            Overwrite existing test files without prompting');
     console.log('  --help                 Show this help message');
     console.log('  --version              Show package version');
     console.log('');
@@ -151,13 +152,16 @@ async function main() {
   const rootDirFlag = args.find((arg: string) => arg.startsWith('--root-dir='));
   const rootDir = rootDirFlag ? rootDirFlag.replace('--root-dir=', '') : undefined;
   
+  const overwriteFlag = args.find((arg: string) => arg.startsWith('--overwrite'));
+  const overwrite = overwriteFlag !== undefined;
+  
   try {
     // Load base config
     const baseConfig = await loadConfigAndValidate(configPath, cwd);
     
     // Build final config from CLI flags
     const finalConfig = buildConfigFromFlags(
-      { include, exclude, outDir, rootDir },
+      { include, exclude, outDir, rootDir, overwrite },
       baseConfig
     );
     
@@ -183,6 +187,7 @@ async function main() {
       mapper,
       outDir: finalConfig.outDir,
       rootDir: finalConfig.rootDir,
+      overwrite: finalConfig.overwrite,
       cwd
     });
     console.log('Test files generated successfully');

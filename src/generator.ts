@@ -54,7 +54,7 @@ import { extractSnippets, findFiles } from './extractor.js';
  * ```
  */
 export async function generate(options: GenerateOptions): Promise<void> {
-  const { include, exclude, mapper, cwd = process.cwd(), outDir, rootDir } = options;
+  const { include, exclude, mapper, cwd = process.cwd(), outDir, rootDir, overwrite } = options;
   
   for await (const filePath of findFiles(include, exclude, cwd)) {
     const snippets = await extractSnippets(filePath, cwd, rootDir);
@@ -75,6 +75,18 @@ export async function generate(options: GenerateOptions): Promise<void> {
     const outputDir = path.dirname(absoluteOutputPath);
     
     await fs.mkdir(outputDir, { recursive: true });
+    
+    // Check if file exists and overwrite is not enabled
+    if (!overwrite) {
+      try {
+        await fs.access(absoluteOutputPath);
+        // File exists, skip
+        continue;
+      } catch {
+        // File doesn't exist, proceed with writing
+      }
+    }
+    
     await fs.writeFile(absoluteOutputPath, output, 'utf-8');
   }
 }

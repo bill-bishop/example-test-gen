@@ -48,9 +48,14 @@ export function createJestMapper(): MapperFunction {
         allImports.add(imp);
       }
     }
+
+    // Add auto-import of source file
+    const sourceRelativePath = first.dir ? `./${first.dir}/${first.filename}` : `./${first.filename}`;
+    allImports.add(`import * as ${testName} from '${sourceRelativePath}';`);
+
     const importSection = allImports.size > 0 ? Array.from(allImports).join('\n') + '\n\n' : '';
 
-    const header = `// Generated test from @example snippets\n// Source: ${first.dir ? first.dir + '/' : ''}${first.filename}\n\n`;
+    const header = `// Auto-generated test file from @example snippets\n// Source: ${first.dir ? first.dir + '/' : ''}${first.filename}\n// Generated: ${new Date().toISOString()}\n\n`;
 
     // Generate multiple it() blocks, one per snippet
     const testBlocks = snippets.map(s => {
@@ -81,9 +86,14 @@ export function createVitestMapper(): MapperFunction {
         allImports.add(imp);
       }
     }
+
+    // Add auto-import of source file
+    const sourceRelativePath = first.dir ? `./${first.dir}/${first.filename}` : `./${first.filename}`;
+    allImports.add(`import * as ${testName} from '${sourceRelativePath}';`);
+
     const importSection = allImports.size > 0 ? Array.from(allImports).join('\n') + '\n\n' : '';
 
-    const header = `// Generated test from @example snippets\n// Source: ${first.dir ? first.dir + '/' : ''}${first.filename}\n\n`;
+    const header = `// Auto-generated test file from @example snippets\n// Source: ${first.dir ? first.dir + '/' : ''}${first.filename}\n// Generated: ${new Date().toISOString()}\n\n`;
 
     // Generate multiple test() blocks, one per snippet
     const testBlocks = snippets.map(s => {
