@@ -2,6 +2,8 @@
  * Information about an extracted code snippet
  * @example SDK02_snippetInfo_type_usage
  * ```ts
+ * import { SnippetInfo } from './types.ts';
+ *
  * const snippet: SnippetInfo = {
  *   imports: ["import { foo } from './bar';"],
  *   snippet: "expect(foo()).toBe(42);",
@@ -25,6 +27,8 @@ export interface SnippetInfo {
  * Result returned by a mapper function
  * @example SDK02_mapperResult_type_usage
  * ```ts
+ * import { MapperResult } from './types.ts';
+ *
  * const result: MapperResult = {
  *   output: "describe('test', () => { it('works', () => {}); });",
  *   filepath: "test/example.test.ts"
@@ -42,6 +46,8 @@ export interface MapperResult {
  * Mapper function type that transforms snippets into test output
  * @example SDK02_mapperFunction_type_usage
  * ```ts
+ * import { MapperFunction } from './types.ts';
+ *
  * const myMapper: MapperFunction = (snippets) => {
  *   if (snippets.length === 0) return null;
  *   return {
@@ -63,6 +69,8 @@ export type MapperFn = MapperFunction;
  * Options for test generation
  * @example SDK02_generateOptions_type_usage
  * ```ts
+ * import { GenerateOptions } from './types.ts';
+ *
  * const options: GenerateOptions = {
  *   include: "src/**\/*.ts",
  *   exclude: ["**\/*.test.ts", "node_modules/**"],
@@ -94,6 +102,8 @@ export interface GenerateOptions {
  * Configuration interface for CLI usage (deprecated, use GenerateOptions)
  * @example SDK02_config_type_usage
  * ```ts
+ * import { Config } from './types.ts';
+ *
  * const config: Config = {
  *   include: ["src/**\/*.ts"],
  *   exclude: ["**\/*.test.ts"],

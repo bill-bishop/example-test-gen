@@ -9,6 +9,11 @@ function getOutputsDir(cwd: string = process.cwd()): string {
  * Read an output file from the outputs directory
  * @example outputs_readOutputFile_reads_file_content
  * ```ts
+ * import { readOutputFile } from './outputs.ts';
+ * import { mkTempDir, rmDir } from '../test/helpers/environment.js';
+ * import { promises as fs } from 'fs';
+ * import path from 'path';
+ *
  * const testDir = mkTempDir('outputs-test');
  * await fs.mkdir(path.join(testDir, 'outputs'), { recursive: true });
  * await fs.writeFile(path.join(testDir, 'outputs', 'test.txt'), 'Hello World');
@@ -26,6 +31,8 @@ export async function readOutputFile(filename: string, cwd?: string): Promise<st
  * Substitute variables in a template string
  * @example outputs_substituteVariables_replaces_placeholders
  * ```ts
+ * import { substituteVariables } from './outputs.ts';
+ *
  * const result = substituteVariables('Hello {{name}}! Welcome to {{place}}.', {
  *   name: 'Alice',
  *   place: 'Wonderland'
@@ -34,6 +41,8 @@ export async function readOutputFile(filename: string, cwd?: string): Promise<st
  * ```
  * @example outputs_substituteVariables_preserves_unknown_placeholders
  * ```ts
+ * import { substituteVariables } from './outputs.ts';
+ *
  * const result = substituteVariables('Hello {{name}}! Unknown: {{unknown}}.', {
  *   name: 'Alice'
  * });
@@ -48,6 +57,11 @@ export function substituteVariables(template: string, variables: Record<string, 
  * Render an output file with optional variable substitution
  * @example outputs_renderOutput_renders_template_with_variables
  * ```ts
+ * import { renderOutput } from './outputs.ts';
+ * import { mkTempDir, rmDir } from '../test/helpers/environment.js';
+ * import { promises as fs } from 'fs';
+ * import path from 'path';
+ *
  * const testDir = mkTempDir('render-test');
  * await fs.mkdir(path.join(testDir, 'outputs'), { recursive: true });
  * await fs.writeFile(path.join(testDir, 'outputs', 'template.txt'), 'Hello {{name}}!');
@@ -57,6 +71,11 @@ export function substituteVariables(template: string, variables: Record<string, 
  * ```
  * @example outputs_renderOutput_reads_file_without_variables
  * ```ts
+ * import { renderOutput } from './outputs.ts';
+ * import { mkTempDir, rmDir } from '../test/helpers/environment.js';
+ * import { promises as fs } from 'fs';
+ * import path from 'path';
+ *
  * const testDir = mkTempDir('render-test2');
  * await fs.mkdir(path.join(testDir, 'outputs'), { recursive: true });
  * await fs.writeFile(path.join(testDir, 'outputs', 'plain.txt'), 'Plain content');
@@ -88,6 +107,8 @@ export async function printErrorAndExit(filename: string, variables?: Record<str
  * Format a list of errors with numbered prefixes
  * @example outputs_formatErrorList_formats_errors_with_numbers
  * ```ts
+ * import { formatErrorList } from './outputs.ts';
+ *
  * const formatted = formatErrorList(['First error', 'Second error', 'Third error']);
  * expect(formatted).toContain('1. First error');
  * expect(formatted).toContain('2. Second error');
@@ -96,6 +117,8 @@ export async function printErrorAndExit(filename: string, variables?: Record<str
  * ```
  * @example outputs_formatErrorList_returns_empty_string_for_empty_array
  * ```ts
+ * import { formatErrorList } from './outputs.ts';
+ *
  * const formatted = formatErrorList([]);
  * expect(formatted).toBe('');
  * ```

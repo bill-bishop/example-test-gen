@@ -1,7 +1,14 @@
 // Auto-generated test file from @example snippets
 // Source: src/outputs.ts
-// Generated: 2026-04-02T04:14:59.432Z
+// Generated: 2026-04-02T04:20:57.435Z
 
+import { readOutputFile } from './outputs.ts';
+import { mkTempDir, rmDir } from '../test/helpers/environment.js';
+import { promises as fs } from 'fs';
+import path from 'path';
+import { substituteVariables } from './outputs.ts';
+import { renderOutput } from './outputs.ts';
+import { formatErrorList } from './outputs.ts';
 import * as outputs from './src/outputs.ts';
 
 import { test, expect } from 'vitest';

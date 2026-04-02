@@ -1,7 +1,12 @@
 // Auto-generated test file from @example snippets
 // Source: src/types.ts
-// Generated: 2026-04-02T04:15:01.351Z
+// Generated: 2026-04-02T04:20:59.394Z
 
+import { SnippetInfo } from './types.ts';
+import { MapperResult } from './types.ts';
+import { MapperFunction } from './types.ts';
+import { GenerateOptions } from './types.ts';
+import { Config } from './types.ts';
 import * as types from './src/types.ts';
 
 describe('types', () => {
