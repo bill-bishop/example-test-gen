@@ -14,11 +14,14 @@ export interface MapperResult {
 export type MapperFunction = (info: SnippetInfo[]) => MapperResult | null | Promise<MapperResult | null>;
 
 export interface GenerateOptions {
-  pattern: string | string[];
+  include: string | string[];
+  exclude?: string | string[];
   mapper: MapperFunction;
   cwd?: string;
   /** Output directory for generated tests (default: 'tests') */
   outDir?: string;
+  /** Root directory for finding source files */
+  rootDir?: string;
 }
 
 /** @deprecated Use GenerateOptions instead - maintained for backwards compatibility */

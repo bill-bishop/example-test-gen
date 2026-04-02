@@ -34,10 +34,21 @@ const EXAMPLE_REGEX = /@example(?:\s+([^\n`]+))?\s*\n?\s*(?:\*\s*)?```[a-z]*\n?(
  */
 export async function extractSnippets(
   filePath: string,
-  cwd: string
+  cwd: string,
+  rootDir?: string
 ): Promise<SnippetInfo[]> {
   const content = await fs.readFile(filePath, 'utf-8');
-  const dir = path.dirname(path.relative(cwd, filePath));
+  
+  // Compute relative path considering rootDir if provided
+  let relativePath = path.relative(cwd, filePath);
+  if (rootDir) {
+    const rootDirPath = path.resolve(cwd, rootDir);
+    if (filePath.startsWith(rootDirPath)) {
+      relativePath = path.relative(rootDirPath, filePath);
+    }
+  }
+  
+  const dir = path.dirname(relativePath);
   const filename = path.basename(filePath);
   
   const snippets: SnippetInfo[] = [];
@@ -75,10 +86,12 @@ export async function extractSnippets(
 
 export async function* findFiles(
   patterns: string | string[],
+  exclude: string | string[] | undefined,
   cwd: string
 ): AsyncGenerator<string> {
   const fg = await import('fast-glob');
-  const files = await fg.default(patterns, { cwd, absolute: true });
+  const ignore = exclude ? (Array.isArray(exclude) ? exclude : [exclude]) : undefined;
+  const files = await fg.default(patterns, { cwd, absolute: true, ignore });
   for (const file of files) {
     yield file;
   }

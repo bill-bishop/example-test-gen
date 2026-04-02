@@ -1,4 +1,37 @@
+import { promises as fs } from 'fs';
+import path from 'path';
 import { MapperFunction } from './types.js';
+
+interface TsConfig {
+  compilerOptions?: {
+    rootDir?: string;
+  };
+  include?: string[];
+  exclude?: string[];
+}
+
+async function readTsConfig(cwd: string): Promise<TsConfig | null> {
+  try {
+    const tsconfigPath = path.join(cwd, 'tsconfig.json');
+    const content = await fs.readFile(tsconfigPath, 'utf-8');
+    return JSON.parse(content) as TsConfig;
+  } catch {
+    return null;
+  }
+}
+
+export async function resolveBuiltInConfig(name: 'jest' | 'vitest', cwd: string): Promise<{ include: string | string[]; exclude: string | string[]; mapper: MapperFunction }> {
+  const tsconfig = await readTsConfig(cwd);
+  
+  // Default values
+  const rootDir = tsconfig?.compilerOptions?.rootDir ?? './src';
+  const include = tsconfig?.include ?? [`${rootDir.replace(/^\.\//, '').replace(/\/$/, '')}/**/*`];
+  const exclude = tsconfig?.exclude ?? ['node_modules', 'dist', '**/*.test.ts', '**/*.test.js'];
+  
+  const mapper = name === 'jest' ? createJestMapper() : createVitestMapper();
+  
+  return { include, exclude, mapper };
+}
 
 export function createJestMapper(): MapperFunction {
   return (snippets) => {
@@ -66,13 +99,7 @@ export function createVitestMapper(): MapperFunction {
   };
 }
 
-export const builtInConfigs: Record<string, { pattern: string | string[]; mapper: MapperFunction }> = {
-  jest: {
-    pattern: 'src/**/*.{ts,js,tsx,jsx}',
-    mapper: createJestMapper()
-  },
-  vitest: {
-    pattern: 'src/**/*.{ts,js,tsx,jsx}',
-    mapper: createVitestMapper()
-  }
+export const builtInConfigs = {
+  jest: (cwd: string) => resolveBuiltInConfig('jest', cwd),
+  vitest: (cwd: string) => resolveBuiltInConfig('vitest', cwd)
 };

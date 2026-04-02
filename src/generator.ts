@@ -54,10 +54,10 @@ import { extractSnippets, findFiles } from './extractor.js';
  * ```
  */
 export async function generate(options: GenerateOptions): Promise<void> {
-  const { pattern, mapper, cwd = process.cwd(), outDir } = options;
+  const { include, exclude, mapper, cwd = process.cwd(), outDir, rootDir } = options;
   
-  for await (const filePath of findFiles(pattern, cwd)) {
-    const snippets = await extractSnippets(filePath, cwd);
+  for await (const filePath of findFiles(include, exclude, cwd)) {
+    const snippets = await extractSnippets(filePath, cwd, rootDir);
     
     if (snippets.length === 0) continue;
     

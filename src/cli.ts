@@ -1,14 +1,15 @@
 #!/usr/bin/env node
+import { promises as fs } from 'fs';
 import path from 'path';
 import { pathToFileURL } from 'url';
 import { generate } from './generator.js';
 import { MapperFunction } from './types.js';
 import { builtInConfigs } from './builtins.js';
 
-async function loadConfig(configPath: string): Promise<{ mapper: MapperFunction; pattern: string | string[] }> {
+async function loadConfig(configPath: string, cwd: string): Promise<{ mapper: MapperFunction; include: string | string[]; exclude?: string | string[]; rootDir?: string }> {
   // Check for built-in configs first
-  if (builtInConfigs[configPath]) {
-    return builtInConfigs[configPath];
+  if (configPath === 'jest' || configPath === 'vitest') {
+    return builtInConfigs[configPath](cwd);
   }
   
   const resolvedPath = path.resolve(configPath);
@@ -72,12 +73,21 @@ async function loadConfig(configPath: string): Promise<{ mapper: MapperFunction;
  * expect(() => runCli('--config=/path/that/does/not/exist.mjs')).toThrow();
  * ```
  *
- * @example CLI05_files_flag_overrides_config_pattern
+ * @example CLI05_include_flag_overrides_config_pattern
  * ```ts
  * import { runCli, cleanDir, fileExists } from '../test/helpers/environment.js';
  * cleanDir('tests');
- * runCli('--config=vitest --files="src/cli.ts"');
+ * runCli('--config=vitest --include="src/cli.ts"');
  * expect(fileExists('tests/cli.test.ts')).toBe(true);
+ * ```
+ *
+ * @example CLI05_exclude_flag_filters_out_files
+ * ```ts
+ * import { runCli, cleanDir, fileExists } from '../test/helpers/environment.js';
+ * cleanDir('tests');
+ * runCli('--config=vitest --include="src/*.ts" --exclude="**\/cli.ts"');
+ * expect(fileExists('tests/cli.test.ts')).toBe(false);
+ * expect(fileExists('tests/builtins.test.ts')).toBe(true);
  * ```
  *
  * @example CLI06_outDir_flag_overrides_default_output_directory
@@ -91,12 +101,62 @@ async function loadConfig(configPath: string): Promise<{ mapper: MapperFunction;
  */
 async function main() {
   const args = process.argv.slice(2);
+  
+  // Handle help and version flags
+  if (args.includes('--help')) {
+    console.log('Usage: npx example-test-gen [options]');
+    console.log('');
+    console.log('Options:');
+    console.log('  --config=<name|path>   Built-in config (jest|vitest) or custom config file path');
+    console.log('  --include=<pattern>    File pattern(s) to include (overrides config)');
+    console.log('  --exclude=<pattern>    File pattern(s) to exclude (overrides config)');
+    console.log('  --outDir=<dir>         Output directory for generated tests');
+    console.log('  --root-dir=<dir>       Root directory for finding source files');
+    console.log('  --help                 Show this help message');
+    console.log('  --version              Show package version');
+    console.log('');
+    console.log('Examples:');
+    console.log('  npx example-test-gen --config=vitest');
+    console.log('  npx example-test-gen --config=jest --include="src/**/*.ts"');
+    console.log('  npx example-test-gen --config=./my-config.mjs --outDir=./tests');
+    process.exit(0);
+  }
+  
+  const cwd = process.cwd();
+  
+  if (args.includes('--version')) {
+    const pkgPath = path.resolve(cwd, 'package.json');
+    const pkg = JSON.parse(await fs.readFile(pkgPath, 'utf-8'));
+    console.log(pkg.version);
+    process.exit(0);
+  }
+  
   const configFlag = args.find((arg: string) => arg.startsWith('--config='));
   const configPath = configFlag ? configFlag.replace('--config=', '') : 'example-test-gen.config.mjs';
   
+  const includeFlag = args.find((arg: string) => arg.startsWith('--include='));
+  const include = includeFlag ? includeFlag.replace('--include=', '') : undefined;
+  
+  const excludeFlag = args.find((arg: string) => arg.startsWith('--exclude='));
+  const exclude = excludeFlag ? excludeFlag.replace('--exclude=', '') : undefined;
+  
+  const outDirFlag = args.find((arg: string) => arg.startsWith('--outDir='));
+  const outDir = outDirFlag ? outDirFlag.replace('--outDir=', '') : undefined;
+  
+  const rootDirFlag = args.find((arg: string) => arg.startsWith('--root-dir='));
+  const rootDir = rootDirFlag ? rootDirFlag.replace('--root-dir=', '') : undefined;
+  
   try {
-    const { mapper, pattern } = await loadConfig(configPath);
-    await generate({ pattern, mapper });
+    const config = await loadConfig(configPath, cwd);
+    
+    await generate({
+      include: include ?? config.include,
+      exclude: exclude ?? config.exclude,
+      mapper: config.mapper,
+      outDir,
+      rootDir: rootDir ?? config.rootDir,
+      cwd
+    });
     console.log('Test files generated successfully');
   } catch (err) {
     console.error('Error:', (err as Error).message);

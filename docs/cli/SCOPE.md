@@ -3,7 +3,7 @@
 ## Requirements Analysis
 
 ### CLI05: CLI Include/Exclude Override
-**Status**: Not Implemented
+**Status**: Implemented
 
 **Required Changes**:
 - `src/cli.ts:92-107` - Replace `--files` parsing with `--include` and add `--exclude` flag parsing
@@ -14,7 +14,7 @@
 - `src/builtins.ts:69-78` - Update builtin configs to use `include` instead of `pattern`
 
 ### CLI06: CLI Output Directory
-**Status**: Not Implemented
+**Status**: Implemented
 
 **Required Changes**:
 - `src/cli.ts:92-107` - Add parsing for `--outDir` flag
@@ -23,7 +23,7 @@
 - `src/generator.ts:72` - Ensure outDir handling works correctly (currently implemented but may need adjustment)
 
 ### CLI07: CLI Root Directory
-**Status**: Not Implemented
+**Status**: Implemented
 
 **Required Changes**:
 - `src/cli.ts:92-107` - Add parsing for `--root-dir` flag
@@ -33,7 +33,7 @@
 - `src/extractor.ts:35-74` - Use rootDir for computing snippet directory paths
 
 ### CLI02: Built-in Configs (tsconfig integration)
-**Status**: Partially Implemented (builtins exist, no tsconfig reading)
+**Status**: Implemented (builtins exist, reads tsconfig.json)
 
 **Required Changes**:
 - `src/builtins.ts:69-78` - Modify `builtInConfigs` to be a function that reads tsconfig.json

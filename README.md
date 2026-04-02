@@ -22,13 +22,13 @@ The existing code should be updated to meet these requirements where applicable.
 
 | ID | Requirement (plain language) | Test Pattern(s) | User Reviewed | Tests Completed | Implemented |
 |----|------------------------------|-----------------|---------------|-----------|-------------|
-| **CLI01** | **CLI Entry**: Executable as `npx example-test-gen` with `--help` and `--version` flags | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] | [ ] |
-| **CLI02** | **Built-in Configs**: Support `--config=jest` and `--config=vitest` for zero-config test generation. These builtins use `tsconfig.json` properties (`compilerOptions.rootDir`, `include` and `exclude`) to detect source files.  If no `tsconfig.json` is found, `./src` is used as the rootDir, and all files will be scanned for `@example` tags | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] | [ ] |
-| **CLI03** | **Custom Config Path**: Support `--config=./path.ts` for user-defined config files | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] | [ ] |
-| **CLI04** | **CLI Error Handling**: Clear error messages for missing config, invalid config paths, and config load failures | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] | [ ] |
-| **CLI05** | **CLI Include/Exclude Override**: Support `--include` and `--exclude` flags for ad-hoc file selection (e.g., `--include="src/**/*.ts"`, `--exclude="**/*.test.ts"`) | End-to-end CLI tests via @example in `cli.ts` | [x] | [ ] | [ ] |
-| **CLI06** | **CLI Output Directory**: Support `--outDir` flag to override the built-in mapper's default output directory (e.g., `--outDir=./generated-tests`) | End-to-end CLI tests via @example in `cli.ts` | [x] | [ ] | [ ] |
-| **CLI07** | **CLI Root Directory**: Support `--root-dir` flag to override the source root used for finding @examples  (e.g., `--root-dir=./src`) | End-to-end CLI tests via @example in `cli.ts` | [x] | [ ] | [ ] |
+| **CLI01** | **CLI Entry**: Executable as `npx example-test-gen` with `--help` and `--version` flags | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] | [x] |
+| **CLI02** | **Built-in Configs**: Support `--config=jest` and `--config=vitest` for zero-config test generation. These builtins use `tsconfig.json` properties (`compilerOptions.rootDir`, `include` and `exclude`) to detect source files.  If no `tsconfig.json` is found, `./src` is used as the rootDir, and all files will be scanned for `@example` tags | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] | [x] |
+| **CLI03** | **Custom Config Path**: Support `--config=./path.ts` for user-defined config files | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] | [x] |
+| **CLI04** | **CLI Error Handling**: Clear error messages for missing config, invalid config paths, and config load failures | End-to-end CLI tests via @example in `cli.ts` | [x] | [x] | [x] |
+| **CLI05** | **CLI Include/Exclude Override**: Support `--include` and `--exclude` flags for ad-hoc file selection (e.g., `--include="src/**/*.ts"`, `--exclude="**/*.test.ts"`) | End-to-end CLI tests via @example in `cli.ts` | [x] | [ ] | [x] |
+| **CLI06** | **CLI Output Directory**: Support `--outDir` flag to override the built-in mapper's default output directory (e.g., `--outDir=./generated-tests`) | End-to-end CLI tests via @example in `cli.ts` | [x] | [ ] | [x] |
+| **CLI07** | **CLI Root Directory**: Support `--root-dir` flag to override the source root used for finding @examples  (e.g., `--root-dir=./src`) | End-to-end CLI tests via @example in `cli.ts` | [x] | [ ] | [x] |
 | **SDK01** | **Programmatic API**: Export `generateTests()` function as primary entry point | Contract tests via @example in `index.ts` | [x] | [ ] | [ ] |
 | **SDK02** | **API Types**: Export TypeScript types (`SnippetInfo`, `MapperResult[]`, `MapperFn`, `Config`). MapperFn receives `SnippetInfo[]` and returns `MapperResult[]` | Contract tests via @example in `index.ts` | [x] | [ ] | [ ] |
 | **SDK03** | **Built-in Mappers Export**: Export `builtInConfigs.jest` and `builtInConfigs.vitest` for SDK consumers | Contract tests via @example in `builtins.ts` | [x] | [ ] | [ ] |
