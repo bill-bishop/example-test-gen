@@ -1,6 +1,6 @@
 // Auto-generated test file from @example snippets
 // Source: src/cli.ts
-// Generated: 2026-04-02T02:02:16.619Z
+// Generated: 2026-04-02T02:17:57.361Z
 
 import { runCli, readFile } from '../test/helpers/environment.js';
 import { runCli, rm, fileExists } from '../test/helpers/environment.js';
@@ -49,16 +49,20 @@ test('CLI04_invalid_config_path_shows_error', async () => {
 });
 
 test('CLI05_include_flag_overrides_config_pattern', async () => {
-  cleanDir('tests');
-  runCli('--config=vitest --include="src/cli.ts"');
-  expect(fileExists('tests/cli.test.ts')).toBe(true);
+  cleanDir('custom-output');
+  runCli('--config=vitest --include="src/cli.ts" --outDir="custom-output"');
+  expect(fileExists('custom-output/cli.test.ts')).toBe(true);
+  cleanDir('custom-output');
 });
 
 test('CLI05_exclude_flag_filters_out_files', async () => {
-  cleanDir('tests');
-  runCli('--config=vitest --include="src/*.ts" --exclude="**\/cli.ts"');
-  expect(fileExists('tests/cli.test.ts')).toBe(false);
-  expect(fileExists('tests/builtins.test.ts')).toBe(true);
+  cleanDir('custom-output');
+  expect(fileExists('custom-output/cli.test.ts')).toBe(false);
+  expect(fileExists('custom-output/builtins.test.ts')).toBe(false);
+  runCli('--config=vitest --include="src/*.ts" --exclude="**\/cli.ts" --outDir="custom-output"');
+  expect(fileExists('custom-output/cli.test.ts')).toBe(false);
+  expect(fileExists('custom-output/builtins.test.ts')).toBe(true);
+  cleanDir('custom-output');
 });
 
 test('CLI06_outDir_flag_overrides_default_output_directory', async () => {
