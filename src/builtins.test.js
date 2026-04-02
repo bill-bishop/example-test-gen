@@ -1,6 +1,6 @@
 // Auto-generated test file from @example snippets
 // Source: src/builtins.ts
-// Generated: 2026-04-02T02:22:21.774Z
+// Generated: 2026-04-02T02:51:17.197Z
 
 import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'fs';
 import { tmpdir } from 'os';

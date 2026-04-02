@@ -1,6 +1,6 @@
 // Auto-generated test file from @example snippets
 // Source: src/cli.ts
-// Generated: 2026-04-02T02:22:21.924Z
+// Generated: 2026-04-02T02:51:17.344Z
 
 import { runCli, readFile } from '../test/helpers/environment.js';
 import { runCli, rm, fileExists } from '../test/helpers/environment.js';
@@ -48,7 +48,7 @@ test('CLI04_invalid_config_path_shows_error', async () => {
   expect(() => runCli('--config=/path/that/does/not/exist.mjs')).toThrow();
 });
 
-test('CLI05_include_flag_overrides_config_pattern', async () => {
+test('CLI05_include_flag_overrides_config_pattern todo: fix this test - it will always pass', async () => {
   cleanDir('custom-output');
   runCli('--config=vitest --include="src/cli.ts" --outDir="custom-output"');
   expect(fileExists('custom-output/cli.test.ts')).toBe(true);

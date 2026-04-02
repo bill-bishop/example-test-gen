@@ -78,7 +78,7 @@ async function loadConfigAndValidate(configPath, cwd) {
  * expect(() => runCli('--config=/path/that/does/not/exist.mjs')).toThrow();
  * ```
  *
- * @example CLI05_include_flag_overrides_config_pattern
+ * @example CLI05_include_flag_overrides_config_pattern todo: fix this test - it will always pass
  * ```ts
  * import { runCli, cleanDir, fileExists } from '../test/helpers/environment.js';
  * cleanDir('custom-output');
